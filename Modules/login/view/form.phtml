@@ -1,0 +1,26 @@
+<div class="loginContainer">
+    <?php $form = $this->get('form'); ?>
+    <?= $form->openTag() ?>
+    <?= $form->formElement('username') ?>
+    <?= $form->formElement('password') ?>
+  <!--  <?= $form->formElement('staylogin') ?> -->
+    <?= $form->formElement('login') ?>
+    <?= $form->closeTag() ?>
+</div>
+
+<script>
+    $("#loginForm").ajaxForm({
+      //  url: '/____/login/login',
+        type: 'post',
+        success: function(){
+            location.reload();
+        }
+    });
+//    $('#loginForm').submit(function(e){ console.log('asd');
+//        e.preventDefault();
+//        $.ajax({
+//            method: 'POST',
+//            data:
+//        });
+//    });
+</script>

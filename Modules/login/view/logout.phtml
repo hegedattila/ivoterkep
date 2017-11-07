@@ -1,0 +1,15 @@
+<div id="logoutBtn" class="button">
+    <?= \System\Translator::translateModule('login', 'login', 'logout') ?>
+</div>
+<script>
+    $('#logoutBtn').click(function(){
+        $.ajax({
+            url: '<?= $this->get('logoutUrl') ?>',
+            method: 'POST',
+            success: function(){
+                location.reload();
+            }
+        });
+    });
+    
+</script>

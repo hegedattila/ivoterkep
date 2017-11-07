@@ -1,0 +1,27 @@
+<div id="container">
+    <?php $form = $this->get('form'); ?>
+    <?= $form->openTag(); ?>
+    
+<!--    <fieldset>
+      <legend>Usergroup:</legend>-->
+      <?= $form->renderAllToRows(); ?>
+<!--    </fieldset>-->
+    <?= $form->formElement('submit'); ?>
+    <?= $form->closeTag(); ?>
+</div>
+<script>
+    
+    $(document).ready(function() {
+        $("#ugroupForm")
+                .ajaxForm({
+                    beforeSerialize: function() {
+                        $("#loader").show();
+                    },
+                    success: function(response, status, xhr){
+                        $("#loader").hide();
+                        adminLoader(response,xhr);
+                    }
+                });
+    });
+    
+</script>

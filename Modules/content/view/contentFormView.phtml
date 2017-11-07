@@ -1,0 +1,146 @@
+<div id="container">
+    <?php $form = $this->get('form'); ?>
+    <?= $form->openTag(); ?>
+
+    <fieldset>
+        <legend>_Általános beáll.:</legend>
+        <div class="c2 colpadding">
+            <?= $form->formElement('active'); ?>
+        </div>
+        <div class="c4 colpadding">
+            <?= $form->formElement('category'); ?>
+        </div>
+        <div class="c6 colpadding">
+            <?php // $form->formElement('labels'); ?>
+        </div>
+        <div class="c5 colpadding clear">
+            <?= $form->formElement('publish_date'); ?>
+        </div>
+        <div class="c5 colpadding">
+            <?= $form->formElement('unpublish_date'); ?>
+        </div>
+        <div class="c2 colpadding clear">
+            <div class="leadIm">
+                <?= $form->formElement('lead_image'); ?>
+            </div>
+            <?= $form->formElement('no_lead_image'); ?>
+        </div>
+        <div id="img_preview" class="c10">
+            <img id="previewimg" src="">
+        </div>
+    </fieldset>
+    <fieldset>
+        <div id="tabs">
+            <ul>
+                <?php
+                $langs = $this->get('langs');
+                foreach ($langs as $key => $lang) {
+                    ?>
+                    <li>
+                        <a href="#tab-<?= $key ?>"><?= $lang ?></a>
+                    <?= $form->formElement('enabled', false, false, $key); ?>
+                    </li>
+<?php } ?>
+                <div class="clear"></div>
+            </ul>
+<?php foreach ($langs as $key => $lang) { ?>
+                <div id="tab-<?= $key ?>">
+                    <div class="c5 colpadding">
+                        <?= $form->formElement('title', true, true, $key); ?>
+                        <?= $form->formElement('sef', true, true, $key); ?>
+    <?= $form->formElement('keywords', true, true, $key); ?>
+                    </div>
+                    <div class="c7 colpadding">
+    <?= $form->formElement('lead', true, true, $key); ?>
+                    </div>
+                    <div class="c12 colpadding clear">
+    <?= $form->formElement('content', true, true, $key); ?>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+<?php } ?>
+        </div>
+    </fieldset>
+    <?= $form->formElement('submit'); ?>
+<?= $form->closeTag(); ?>
+    <input name="tmce_upl" type="file" id="tmce_upl" style="display:none;">
+</div>
+
+
+<script src="/widgets/tinymce/tinymce.min.js"></script>
+<script src="/widgets/tinymce/jquery.tinymce.min.js"></script>
+<script src="/widgets/chosen/chosen.jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $("#tabs").tabs();
+        $("#contentForm")
+                .ajaxForm({
+                    beforeSerialize: function () {
+                        //  $("#loader").show();
+                    },
+                    success: function (response, status, xhr) {
+                        //   $("#loader").hide();
+                        adminLoader(response, xhr);
+                    }
+                })
+                .hideElements([
+                    {element: '#no_lead_image', values: [true], hideElements: '.leadIm,#img_preview'}
+                ])
+                .find('#category').chosen({
+            disable_search: true,
+            width: "100%"
+        });
+
+        $(".tinymce").tinymce({
+            elementpath: false,
+            height: 400,
+            max_height: 1000,
+            statusbar: false,
+            
+            paste_data_images: true,
+            file_picker_types: 'image',
+    plugins: [
+      "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+      "searchreplace wordcount visualblocks visualchars code fullscreen",
+      "insertdatetime media nonbreaking save table contextmenu directionality",
+      "emoticons template paste textcolor colorpicker textpattern"
+    ],
+    toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+    images_upload_url: '/hejj/ho',
+    automatic_uploads: true,
+        file_picker_callback: function(callback, value, meta) {
+            callback('https://storage.googleapis.com/gweb-uniblog-publish-prod/static/blog/images/google-200x200.7714256da16f.png',{});
+            
+            if (meta.filetype == 'image') {
+                $('#tmce_upl').trigger('click');
+                
+                
+//              $('#tmce_upl').on('change', function() {
+//                var file = this.files[0];
+//                var reader = new FileReader();
+//                reader.onload = function(e) {
+//                  callback(e.target.result, {
+//                    alt: ''
+//                  });
+//                };
+//                reader.readAsDataURL(file);
+//              });
+            }
+          }
+      
+
+
+        });
+
+        $("#lead_image").change(function () {
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#previewimg').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    });
+</script>

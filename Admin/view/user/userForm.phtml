@@ -1,0 +1,22 @@
+<div id="container">
+    <?php $form = $this->get('form'); ?>
+    
+    <?= $form->openTag(); ?>
+      <?= $form->renderToRowsByName(['nick','email','fullName','langId','groups','settings']); ?>
+    <?= $form->formElement('submit'); ?>
+    <?= $form->closeTag(); ?>
+    
+</div>
+
+<script src="/widgets/chosen/chosen.jquery.min.js"></script>
+<!--<script src="/widgets/tinymce/tinymce.min.js"></script>
+<script src="/widgets/tinymce/jquery.tinymce.min.js"></script>-->
+
+<script>
+    $(document).ready(function() {
+        $("#userForm")
+                .ajaxForm()
+                .initWidgets(['chosen']);
+    });
+    
+</script>

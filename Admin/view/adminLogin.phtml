@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>
+            WM Admin Login
+        </title>
+        <?php
+            header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
+            header("Pragma: no-cache"); // HTTP 1.0.
+            header("Expires: 0"); // Proxies.
+        ?>
+        <link rel="stylesheet" type="text/css" href="css/admin.css">
+        
+        <script src="js/jquery.min.js"></script> 
+        <script src="js/jquery.form.js"></script> 
+    </head>
+    <body>
+        <div id="adminLoginContainer">
+            <div id="adminLoginImage" style="background-image: url('/img/back1.jpg')">
+                
+            </div>
+            <div id="adminLogin">
+                <?= $this->get('loginform') ?>
+            </div>
+        </div>
+    </body>
+
+</html>

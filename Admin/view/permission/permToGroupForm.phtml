@@ -1,0 +1,9 @@
+<div id="ptgv"></div>
+
+<script src="/js/admin/permissionsTable.js"></script>
+<script>
+    $('#ptgv').drawPermissionTable(<?= json_encode($this->get('perms')) ?>,
+            <?= json_encode($this->get('groups')) ?>
+            )
+            .getPermissionTable();
+</script>

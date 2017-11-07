@@ -1,0 +1,35 @@
+<div id="container">
+    <?php $form = $this->get('form'); ?>
+    <?= $form->openTag(); ?>
+    
+      <?= $form->renderAllToRows(); ?>
+    
+    <div id="moduleList" style="border:solid 1px #ccc;"></div>
+    <div id="proba" style="border:solid 1px #ccc;"></div>
+    <?= $form->formElement('submit'); ?>
+    <?= $form->closeTag(); ?>
+</div>
+
+<script src="/widgets/chosen/chosen.jquery.min.js"></script>
+<script src="/js/admin/templateBuilder.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $("#routeForm")
+                .ajaxForm({
+                    beforeSerialize: function() {
+                        $("#loader").show();
+                    },
+                    success: function(response, status, xhr){
+                        $("#loader").hide();
+                        adminLoader(response,xhr);
+                    }
+                })
+                .initWidgets(['chosen']);
+        
+        tplBuilder().initTplBuilder('#moduleList','#proba','textarea#places','select#layout');
+        
+    });
+
+    
+</script>

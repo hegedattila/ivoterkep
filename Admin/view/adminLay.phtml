@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <title>
+            Admin
+        </title>
+        <link rel="stylesheet" type="text/css" href="/css/columns.css">
+        <link rel="stylesheet" type="text/css" href="/css/admin.css">
+        <link rel="stylesheet" type="text/css" href="/widgets/chosen/chosen.min.css">
+ <!--       <link rel="stylesheet" type="text/css" href="/jquery-ui/js/jquery-ui.min.css"> -->
+        <link rel="stylesheet" type="text/css" href="/font/font-awesome/css/font-awesome.min.css">
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/jquery.form.min.js"></script>
+        <script src="/jquery-ui/js/jquery-ui.min.js"></script>
+<!--        <script src="/widgets/chosen/chosen.jquery.min.js"></script>-->
+        
+        <script src="/widgets/hideElements/hideElements.js"></script>
+        <script src="/js/admin/adminList.js"></script>
+        <script src="/js/admin/admin.js"></script>
+        <!--<script src="/js/admin/formHandler.js"></script> -->
+        <script src="/js/admin/initWidgets.js"></script>
+        <script src="/js/admin/messageHandler.js"></script>
+        <script src="/js/popupWindow.js"></script>
+    </head>
+    <body>
+        <div id="left">
+            <?= $this->get('left') ?>
+            <div id="adminMenu">
+                
+            </div>
+        </div>
+        <div id="right">
+            <div id="TabBar">
+            </div>
+            <div id="TabContent">
+            </div>
+            <div id="moduleMenu">
+            </div>
+            <div id="moduleContent">
+            </div>
+        </div>
+        <div id="messageBox"></div>
+        <div id="loader"></div>
+    </body>
+</html>
+<script>
+    $(document).ready(function() {
+        adminMenu();
+        
+    //    loadAdmin('module1/admin');
+    });
+</script>

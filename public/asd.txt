@@ -1,0 +1,35 @@
+application/msword	.doc	//Microsoft Word file.
+application/octet-stream	.bin, .exe	//Any binary file, shows file download/save dialog box.
+application/pdf	.pdf	//Adobe Acrobat file.
+application/postscript	.ps, .ai, .eps	//PostScript files.
+application/rtf	.rtf	//Rich Text Format.
+application/x-gtar	.gtar	//Compressed Linux file.
+application/x-gzip	.gz //Compressed Linux file.
+application/x-java-archive	.jar	//Java .jar file.
+application/x-java-serialized-object	.ser	//Java .ser file.
+application/x-java-vm	.class	//Java .class file.
+application/x-tar	.tar	//Compressed Linux file.
+application/zip	.zip	//ZIP compressed file.
+Audio Type
+audio/x-aiff	.aiff	//Apple sound file.
+audio/basic	.ua	//Basic 8-bit ULAW file.
+audio/x-midi	.mid, .midi	//MIDI sound file.
+audio/x-wav	.wav	//WAV sound file.
+Image Type
+image/bmp	.bmp	//Bitmap image file.
+image/gif	.gif	//Graphics Interchange Format.
+image/jpeg	.jpeg, .jpg, .jpe	//JPEG is another image compression format.
+image/tiff	.tiff, .tif//	Tag Image File Format.
+image/x-xbitmap	.xbm	//X bitmap format.
+Multipart Type
+multipart/x-gzip	.gzip	//Compressed Linux file.
+multipart/x-zip	.zip	ZIP //compressed file.
+Text Type
+text/html	.htm, .html	//HTML file.
+text/plain	.txt	//Plain text file.
+text/richtext	.rtf, .rtx	//Rich text format.
+Video Type
+video/mpeg	.mpg, .mpeg, .mpe	//MPEG compressed video.
+video/vnd.vivo	.viv, .vivo	//VIVO video codec.
+video/quicktime	.qt, .mov	//Apple's QuickTime format.
+video/x-msvideo	.avi	//Microsoft's video format.
