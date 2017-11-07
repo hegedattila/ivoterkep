@@ -70,17 +70,17 @@ return [
     ],
     'tplFormInfo' => [
         'sub1' => [
-            'displayName'=> 'Elso Modul - 1',
+            'displayName'=> 'ElsoModul - 1',
             'formRoute' => 'admin/tplForm/form1',
             'actionRoute' => 'wer/sdf',
             ],
         'sub2' => [
-            'displayName'=> 'Elso Modul - 2',
+            'displayName'=> 'ElsoModul - 2',
             'formRoute' => 'admin/tplForm/form2',
             'actionRoute' => 'route1',
             ],
         'sub3' => [
-            'displayName'=> 'Elso Modul - 3',
+            'displayName'=> 'ElsoModul - 3',
             'actionRoute' => 'route1',
 //            'formRoute' => 'admin/tplForm/form3',
             ],

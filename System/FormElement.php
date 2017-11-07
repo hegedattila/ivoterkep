@@ -100,7 +100,7 @@ class FormElement extends \System\SystemModels\htmlDom\DOMElement{
         if(count($this->options) > 0){
             if(!isset($this->value) && isset($this->options[''])){
                 $this->options['']->setAttribute('selected', true);
-            } else {
+            } elseif(isset($this->value)) {
                 if( is_array($this->value) ){
                     foreach ($this->value as $value) {
                         $this->options[$value]->setAttribute('selected', true);
