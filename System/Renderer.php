@@ -49,7 +49,7 @@ class Renderer{
         $path2 = MODULEPATH . '/' . $module . '/view/' . $file . '.phtml';
         
         if(is_file($path1)){
-            $this->viewFilename = $path1;
+            $this->viewFilename = $path1; 
             return true;
         } elseif (is_file($path2)) {
             $this->viewFilename = $path2;

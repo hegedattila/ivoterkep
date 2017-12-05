@@ -11,7 +11,6 @@ class DbHandler{
                     $config['uname'],
                     $config['pass']
                     );
- //           $connection = mysqli_connect($config['host'],$config['uname'],$config['pass'],$config['dbname']);
         }
         if($connection === false) {
             return mysqli_connect_error();
