@@ -23,7 +23,7 @@ class templateForm extends \System\AbstractClasses\abstractForm{
                 'label' => \System\Translator::translateAdmin('Labelll', 'layout'),
                 'type' => 'select',
                 'options' => $layouts,
-                'nullOption' => 'Semmi',
+               // 'nullOption' => 'Semmi',
                 'attributes' => [
                     'class' => 'initChosen',
                 ]
