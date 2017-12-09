@@ -5,6 +5,7 @@ namespace System\AbstractClasses;
 abstract class abstractController{
     private $params = [];
     private $headData;
+    private $isAjax;
     
     function __construct(){
         $this->headData = new \System\PageHeadData;
@@ -85,5 +86,8 @@ abstract class abstractController{
     
     protected function setMeta($name, $content) {
         $this->headData->setMetaData($name, $content);
+    }
+    protected function checkIsAjax() {
+        return $this->getParam('isAjax',null);
     }
 }

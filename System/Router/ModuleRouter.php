@@ -40,7 +40,7 @@ class ModuleRouter{
                 'module' => $this->uriComponents[1],
                 'action' => count($this->uriComponents) > 2 ? array_slice($this->uriComponents, 2) : null
             ];
-            $module = new \System\ModuleHandler($param);
+            $module = new \System\ModuleHandler($param, true);
             
             $module->setParam('GETParams', $this->gdata);
             $module->setParam('POSTParams', $this->pdata);

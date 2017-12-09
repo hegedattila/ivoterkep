@@ -14,8 +14,7 @@ var popupWindows = [];
 //      }
 //  });
 // 
-// sőt, gyakorlatilag egy az egyben át lehet adni neki egy ilyet:
-//  makePopUp('data/url', true, continueWhenEveryFieldIsSaved);
+
 function makePopUp(data, isAjaxUrl, openCallback, closeCallback, ajaxComplete) {
     if (!data) {
         return;
@@ -35,7 +34,6 @@ function makePopUp(data, isAjaxUrl, openCallback, closeCallback, ajaxComplete) {
     };
     
     var createWindow = function (content) {
-        // valamiért nem engedte,hogy egy uform-on kívülre tegyem a .popupWindow-ot mert úgy nem találta meg
         var windowContent = $(content);
 
         $(back).html(windowContent);
@@ -65,7 +63,7 @@ function makePopUp(data, isAjaxUrl, openCallback, closeCallback, ajaxComplete) {
                 close();
         });
         obj.scope = back;
-        closeButton = $('<div class="glyphter button popupClose close">');
+        closeButton = $('<div class="button popupClose close">').html('X');
         show();
     };
 

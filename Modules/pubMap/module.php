@@ -55,8 +55,15 @@ return [
             'showMap' => [
                 'action' => 'showMap'
             ],
-            'showPub' => [
+            'showPub' => ['childRoutes' => [
+                    '@' => [
+                        'paramName' => 'pub'
+                    ]
+                ],
                 'action' => 'showPub'
+            ],
+            'getList' => [
+                'action' => 'getList'
             ],
             'deletePub' => [ // frontEnd-en kocsma törlése... 
                 'permission' => 'loggedIn', // Persze ellenőrizzük ezen felül, hogy az próbál-e törölni, aki létrehozta  kocsmát

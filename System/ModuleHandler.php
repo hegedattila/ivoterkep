@@ -15,10 +15,10 @@ class ModuleHandler {
     private $config;
     public $errMsg = null;
         
-    public function __construct($module) {
+    public function __construct($module, $ajax = false) {
         $this->setParam('moduleParams', isset($module['params'])?$module['params']:[] );
         $this->moduleName = $module['module'];
-        
+        $this->params['isAjax'] = $ajax;
         if(ConfigLoader::getActiveModules($this->moduleName)){
         
             if(isset($module['action'])){
