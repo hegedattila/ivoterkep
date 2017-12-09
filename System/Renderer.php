@@ -20,6 +20,11 @@ class Renderer{
     public function setData($key,$data){
         $this->data[$key] = $data;
     }
+    public function setDataArr($array){
+        foreach ($array as $key => $value) {
+            $this->data[$key] = $value;
+        }
+    }
     
     public function getContent(){
         return $this->content;

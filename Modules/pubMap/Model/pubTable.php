@@ -1,4 +1,4 @@
-<?php // MÉG CSAK MÁSOLVA CONTENTBŐL
+<?php
 namespace Modules\pubMap\Model;
 
 use System\DateTimeHandler as dth;
@@ -63,61 +63,6 @@ class pubTable extends \System\AbstractClasses\abstractDb {
             }
         } catch (PDOException $e) {
           //  var_dump($e->getMessage());
-            return false;
-        }
-    }
-    
-    public function saveContentLang($contentId,$ld){
-        try {
-            $paramCont = new \System\ParameterContainer();
-            $paramCont->addParam('cid', $contentId, \PDO::PARAM_INT);
-            
-            $langs = \System\LangHandler::getLangs('ID');
-            $defLang = \System\LangHandler::getDefaultLang();
-            $insertableRowsSqls = [];
-            
-                $updateStrings = [
-                        'enabled = VALUES(enabled)',
-                        'title = VALUES(title)',
-                        'sef = VALUES(sef)',
-                        'keywords = VALUES(keywords)',
-                        'lead = VALUES(lead)',
-                        'content = VALUES(content)',
-                    ];
-                foreach ($langs as $langid) {
-                    $paramCont->addParam('langid' . $langid, $langid, \PDO::PARAM_INT);
-                    $paramCont->addParam('enabled' . $langid, (isset($ld['enabled'][$langid]) || $langid == $defLang)? 1 : 0, \PDO::PARAM_INT);
-                    $paramCont->addParam('title' . $langid, isset($ld['title'][$langid])?$ld['title'][$langid] : null, \PDO::PARAM_STR);
-                    $paramCont->addParam('sef' . $langid, isset($ld['sef'][$langid])?$ld['sef'][$langid] : null, \PDO::PARAM_STR);
-                    $paramCont->addParam('keywords' . $langid, isset($ld['keywords'][$langid])?$ld['keywords'][$langid] : null, \PDO::PARAM_STR);
-                    $paramCont->addParam('lead' . $langid, isset($ld['lead'][$langid])?$ld['lead'][$langid] : null, \PDO::PARAM_STR);
-                    $paramCont->addParam('content' . $langid, isset($ld['content'][$langid])?$ld['content'][$langid] : null, \PDO::PARAM_STR);
-                    
-                    $insertableRowsSqls[$langid] = "(
-                            :langid$langid,
-                            :cid,
-                            :enabled$langid,
-                            :title$langid,
-                            :sef$langid,
-                            :keywords$langid,
-                            :lead$langid,
-                            :content$langid
-                        )";
-}
-            
-            $sql = 'INSERT INTO `content_lang` (lang_id,content_id,enabled,title,sef,keywords,lead,content)
-                    VALUES ' . implode(',', $insertableRowsSqls) . '
-                    ON DUPLICATE KEY UPDATE ' . implode(',', $updateStrings);
-            
-            $qry = $this->db->prepare($sql);
-            $paramCont->setEmptyValuesToNull();
-            $paramCont->bindAll($qry);
-            $qry->execute();
-            
-            return true;
-            
-        } catch (\PDOException $e) {
-           // var_dump($e->getMessage());
             return false;
         }
     }
