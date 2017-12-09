@@ -59,16 +59,16 @@ class pubForm extends \System\AbstractClasses\abstractForm{
                 ]
             ]);
         
-        $this->addElement('keywords',
+        $this->addElement('address',
             [
-                'type' => 'textarea',
-                'label' => \System\Translator::translateAdmin('Labelll', 'keywords'),
+                'type' => 'text',
+                'label' => \System\Translator::translateAdmin('Labelll', 'address'),
                 'attributes' => [
                   //  'placeholder' => tr::translateModule('login', 'login', 'username')
                 ]
             ]);
         
-        $this->addElement('description',
+        $this->addElement('comment',
             [
                 'type' => 'textarea',
                 'label' => \System\Translator::translateAdmin('Labelll', 'description'),
@@ -105,12 +105,13 @@ class pubForm extends \System\AbstractClasses\abstractForm{
         
         
         $this->formElements['name']->validate([
+            'emptyDisabled' => ['value'=> true, 'errMsg'=>'Üres ÉRték!'],
             'maxLength' => ['value'=> 60],
-            'beforeValidate' => $beforeFunc,
             'regex' => ['value'=> '/'. \System\StringHandler::REGEX_HUCHARS_AND_PUNCTUATIONS .'/'],
         ]);
         
         $this->formElements['sef']->validate([
+            'emptyDisabled' => ['value'=> true, 'errMsg'=>'Üres ÉRték!'],
             'maxLength' => ['value'=> 50],
             'regex' => ['value'=> '/'. \System\StringHandler::REGEX_ENCHARS_AND_NUMBERS .'/'],
         ]);

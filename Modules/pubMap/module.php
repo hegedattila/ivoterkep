@@ -63,30 +63,31 @@ return [
                 'action' => 'showPub'
             ],
             'getList' => [
-                'action' => 'getList'
+                'action' => 'pubList'
+                // POST-ban kap majd paramétereket
             ],
-            'deletePub' => [ // frontEnd-en kocsma törlése... 
-                'permission' => 'loggedIn', // Persze ellenőrizzük ezen felül, hogy az próbál-e törölni, aki létrehozta  kocsmát
-                'childRoutes' => [
-                    '@number' => [
-                        'action' => 'delete',
-                        'paramName' => 'id', //parameter a route-ban
-                    ]
-                ]
-            ],
-            'pubForm' => [
-                'permission' => 'loggedIn',
-                'action' => 'showPubForm',
-                'childRoutes' => [
-                    'edit' => [
-                        'childRoutes' => [
-                            '@' => [
-                                'paramName' => 'id', //parameter a route-ban
-                            ]
-                        ]
-                    ]
-                ]
-            ],
+//            'deletePub' => [ // frontEnd-en kocsma törlése... 
+//                'permission' => 'loggedIn', // Persze ellenőrizzük ezen felül, hogy az próbál-e törölni, aki létrehozta  kocsmát
+//                'childRoutes' => [
+//                    '@number' => [
+//                        'action' => 'delete',
+//                        'paramName' => 'id', //parameter a route-ban
+//                    ]
+//                ]
+//            ],
+//            'pubForm' => [
+//                'permission' => 'loggedIn',
+//                'action' => 'showPubForm',
+//                'childRoutes' => [
+//                    'edit' => [
+//                        'childRoutes' => [
+//                            '@' => [
+//                                'paramName' => 'id', //parameter a route-ban
+//                            ]
+//                        ]
+//                    ]
+//                ]
+//            ],
         ]
     ],
     'tplFormInfo' => [
@@ -119,10 +120,10 @@ return [
     'listTemplates' => [ // Az admin felületen lévő mezők
         'pubList' => [
           //  'mezo1' => ['type' => 'text', 'emptyValue' => '', 'sortable' => true, 'searchable' => true,'label' => 'L1'],
-            'mezo2' => ['type' => 'number', 'emptyValue' => '', 'sortable' => true, 'searchable' => true,'label' => 'L2'],
-            'mezo3' => ['type' => 'datetime', 'emptyValue' => '', 'sortable' => true, 'searchable' => true,'label' => 'L3'],
-            'mezo4' => ['type' => 'bool', 'emptyValue' => '', 'sortable' => true, 'searchable' => true,'label' => 'L4'],
-            'mezo5' => ['type' => 'text', 'emptyValue' => '', 'sortable' => true, 'searchable' => true,'label' => 'L5'],
+            'id' => ['type' => 'number', 'emptyValue' => '', 'sortable' => true, 'searchable' => true,'label' => 'ID'],
+            'name' => ['type' => 'text', 'emptyValue' => '', 'sortable' => true, 'searchable' => true,'label' => 'Name'],
+            'address' => ['type' => 'text', 'emptyValue' => '', 'sortable' => true, 'searchable' => true,'label' => 'Address'],
+            'nick' => ['type' => 'text', 'emptyValue' => '', 'sortable' => false, 'searchable' => false,'label' => 'Nick'],
       //      'mezo6' => ['type' => 'text', 'emptyValue' => '', 'sortable' => true, 'searchable' => true,'label' => 'L6'],
         ],
     ],
