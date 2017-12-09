@@ -65,10 +65,10 @@ class ModuleHandler {
         if(isset($routes['action'])){
             $this->callableFunction = $routes['action'] . 'Action';
         }
-        if( isset($routes['parameters']) ){
+        if( isset($routes['parameters']) ){          
             $this->setParam('moduleConfigParams', $routes['parameters']);
         }
-        if( isset($routes['childRoutes']) && isset($this->callableRoutes[$i]) ){
+        if( isset($routes['childRoutes']) && isset($this->callableRoutes[$i]) ){ 
             $actualRoute = $this->callableRoutes[$i];
             if( isset($routes['childRoutes'][$actualRoute]) ){ // literal
                 $this->params['routeName'] = $actualRoute;

@@ -7,7 +7,7 @@ class pubMap extends \System\AbstractClasses\abstractController{
     public function showMapAction(){
         $view = new Renderer();
         $params = $this->getParam();
-        var_dump($params);
+      //  var_dump($params);
         $view->setModuleView('pubMap', 'map');
         $view->setData('valami', "A view számára adat, lehet tömb is, vagy objektum...");
         $view->renderView();
@@ -17,21 +17,10 @@ class pubMap extends \System\AbstractClasses\abstractController{
     public function showPubAction(){
         $view = new Renderer();
         $params = $this->getParam();
-        var_dump($params);
-        $view->setModuleView('pubMap', 'map');
+     //   var_dump($params);
+        $view->setModuleView('pubMap', 'pub');
         $view->setData('valami', "A view számára adat, lehet tömb is, vagy objektum...");
         $view->renderView();
         return $view->getContent();
     }
-    
-    public function showListAction(){
-        $view = new Renderer();
-        $params = $this->getParam();
-        var_dump($params);
-        $view->setModuleView('pubMap', 'map');
-        $view->setData('valami', "A view számára adat, lehet tömb is, vagy objektum...");
-        $view->renderView();
-        return $view->getContent();
-    }
-    
 }

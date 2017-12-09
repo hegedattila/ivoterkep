@@ -1,0 +1,65 @@
+<div id="container">
+    <?php $form = $this->get('form'); ?>
+    <?= $form->openTag(); ?>
+    <?= $form->renderAllToRows(); ?>
+
+    <?= $form->formElement('submit'); ?>
+    <?= $form->closeTag(); ?>
+</div>
+
+<script src="/widgets/tinymce/tinymce.min.js"></script>
+<script src="/widgets/tinymce/jquery.tinymce.min.js"></script>
+<script src="/widgets/chosen/chosen.jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        $("#pubForm")
+                .ajaxForm({
+                    beforeSerialize: function () {
+                        //  $("#loader").show();
+                    },
+                    success: function (response, status, xhr) {
+                        //   $("#loader").hide();
+                        adminLoader(response, xhr);
+                    }
+                })
+                .hideElements([
+                    {element: '#no_lead_image', values: [true], hideElements: '.leadIm,#img_preview'}
+                ]);
+
+        $(".tinymce").tinymce({
+            elementpath: false,
+            height: 400,
+            max_height: 1000,
+            statusbar: false,
+            paste_data_images: true,
+            file_picker_types: 'image',
+            plugins: [
+                "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+                "searchreplace wordcount visualblocks visualchars code fullscreen",
+                "insertdatetime media nonbreaking save table contextmenu directionality",
+                "emoticons template paste textcolor colorpicker textpattern"
+            ],
+            toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+            images_upload_url: '/hejj/ho',
+            automatic_uploads: true,
+            file_picker_callback: function (callback, value, meta) {
+                callback('https://storage.googleapis.com/gweb-uniblog-publish-prod/static/blog/images/google-200x200.7714256da16f.png', {});
+
+                if (meta.filetype == 'image') {
+                    $('#tmce_upl').trigger('click');
+                }
+            }
+        });
+
+        $("#image").change(function () {
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#previewimg').attr('src', e.target.result);
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    });
+</script>

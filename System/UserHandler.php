@@ -26,7 +26,7 @@ class UserHandler {
     }
     
     public static function getSetting($key) {
-        $settings = self::getUserSettings();
+        $settings = self::getSettingsFromDb(); //TODO getUserSettings??
         if(isset($settings[$key])){
             return $settings[$key];
         } else {
@@ -56,5 +56,8 @@ class UserHandler {
         } else {
             return false;
         }
+    }
+    public static function checkIsLoggedIn(){
+        return SessionHandler::getUserId() !== null;
     }
 }

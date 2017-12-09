@@ -23,21 +23,21 @@ class adminController extends \System\AbstractClasses\abstractController{
             return [
                     [
                         'icoClass' => 'fa fa-times',
-                        'url' => 'content/admin/delete/' . $origData['id'],
+                        'url' => 'pubMap/admin/delete/' . $origData['id'],
                         'confirm' => tr::translateGlob('common', 'confirm'),
                         'tooltip' => tr::translateGlob('common', 'delete')
                     ],
                     [
                         'icoClass' => 'fa fa-pencil',
-                        'url' => 'content/admin/form/' . $origData['id'],
+                        'url' => 'pubMap/admin/form/' . $origData['id'],
                         'tooltip' => tr::translateGlob('common', 'edit')
                     ],
                 ];
         };
         $submenu = [
-            ['label' => 'New', 'icon' => 'plus-circle', 'action' => 'content/admin/form/add'],
+            ['label' => 'New', 'icon' => 'plus-circle', 'action' => 'pubMap/admin/form/add'],
         ];
-        $listData = \Admin\Classes\ListHandler::prepareList($data, 'content', 'contents', 'id', $setButtons);
+        $listData = \Admin\Classes\ListHandler::prepareList($data, 'pubMap', 'pubs', 'id', $setButtons);
         $listData['massbuttons'] = [
             [
             'text' => tr::translateGlob('common', 'deleteSelected'),
@@ -50,27 +50,52 @@ class adminController extends \System\AbstractClasses\abstractController{
     }
     
     public function addFormAction(){
-//        $this->setHeaderDataType('JSON');
-//        return json_encode(['VIEW'=>$view->getContent() ]);
+        $this->setHeaderDataType('JSON');
+        $form = new \Modules\pubMap\Form\pubForm('/____/pubMap/admin/save/add');
+        $view = new \System\Renderer();
+        $view->setData('form', $form);
+        $view->setModuleView('pubMap','pubFormView');
+        $view->renderView();
+        return json_encode(['VIEW'=>$view->getContent() ]);
     }
     
     public function editFormAction(){
-//        $this->setHeaderDataType('JSON');
-//        return json_encode([ 'MESSAGE'=>$msg, 'VIEW'=>$view->getContent() ]);
+        $this->setHeaderDataType('JSON');
+        $msg = null;
+        $view = new \System\Renderer();
+        $id = $this->getParam(['moduleRouteParams','id']);
+        if(is_numeric($id)){
+            $data = $this->getTable()->getDataToForm($id);
+            if($data){
+                $form = new \Modules\content\Form\contentForm('/____/pubMap/admin/save/' . $id);
+                $form->setValues( $data );
+                $view->setData('form', $form);
+                $view->setModuleView('content','contentFormView');
+                $view->renderView();
+            } else {
+                $msg = ['msg'=>'DB Hiba','color'=>'red'];
+            }
+        } else {
+            $msg = ['msg'=>'noId','color'=>'red'];
+        }
+        return json_encode([ 'MESSAGE'=>$msg, 'VIEW'=>$view->getContent() ]);
     }
     
     public function addAction(){
-//        $this->setHeaderDataType('JSON');
-//        return json_encode(['INVALIDINPUTS'=>$invalidFormInputs, 'MESSAGE'=>$msg, 'REDIRECT'=>$redir]);
+        $this->setHeaderDataType('JSON');
+        $message = ['msg'=>'Az action (addAction) nincs létrehozva.. kérlek, tedd meg ;)','color'=>'red'];
+        return json_encode(['INVALIDINPUTS'=>null, 'MESSAGE'=>$message, 'REDIRECT'=>null]);
     }
         
     public function editAction(){
-//        $this->setHeaderDataType('JSON');
-//        return json_encode(['INVALIDINPUTS'=>$invalidFormInputs, 'MESSAGE'=>$msg, 'REDIRECT'=>$redir]);
+        $this->setHeaderDataType('JSON');
+        $message = ['msg'=>'Az action (editAction) nincs létrehozva.. kérlek, tedd meg ;)','color'=>'red'];
+        return json_encode(['INVALIDINPUTS'=>null, 'MESSAGE'=>$message, 'REDIRECT'=>null]);
     }
         
     public function deleteAction(){
-//        $this->setHeaderDataType('JSON');
-//        return json_encode(['MESSAGE'=>$msg, 'REDIRECT'=>$redir]);
+        $this->setHeaderDataType('JSON');
+        $message = ['msg'=>'Az action (deleteAction) nincs létrehozva.. kérlek, tedd meg ;)','color'=>'red'];
+        return json_encode(['INVALIDINPUTS'=>null, 'MESSAGE'=>$message, 'REDIRECT'=>null]);
     }
 }

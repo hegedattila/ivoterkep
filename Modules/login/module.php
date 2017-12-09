@@ -5,10 +5,17 @@ return [
     ],
     'routes' => [
         'controller' => 'login',
-        'action' => 'showLoginForm',
+        'action' => 'showLoginLogout',
+        'parameters' => [
+            'loginFormAction'=>'/____/login/sendLogin',
+            'logoutFormAction'=>'/____/login/sendLogout'
+        ],
         'childRoutes' => [
             'sendLogin' => [
                 'action' => 'login',
+            ],
+            'loginForm' => [
+                'action' => 'showLoginForm',
             ],
             'logoutBtn' => [
                 'action' => 'showLogout',

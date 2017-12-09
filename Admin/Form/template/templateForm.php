@@ -11,7 +11,7 @@ class templateForm extends \System\AbstractClasses\abstractForm{
             [
                 'type' => 'text',
                 'tooltip' => \System\Translator::translateAdmin('tooltip', 'tippp'),
-                'label' => \System\Translator::translateAdmin('Labelll', 'route'),
+                'label' => \System\Translator::translateAdmin('Labelll', 'name'),
                 'attributes' => [
                   //  'placeholder' => \System\Translator::translateModule('login', 'login', 'username')
                 ]

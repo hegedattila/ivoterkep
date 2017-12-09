@@ -26,7 +26,7 @@ class ListHandler {
         }
     }
 
-    public static function prepareList($list,$moduleName,$listName,$idField = 'id',$userFunc = null) {
+    public static function prepareList($list, $moduleName, $listName, $idField = 'id', $userFunc = null) {
         $listTemplates = \System\ConfigLoader::getModuleConfig($moduleName, 'listTemplates')[$listName];
         $sorterArray = array_flip(array_keys($listTemplates));
         

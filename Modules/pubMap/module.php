@@ -58,9 +58,6 @@ return [
             'showPub' => [
                 'action' => 'showPub'
             ],
-            'showList' => [
-                'action' => 'showList'
-            ],
             'deletePub' => [ // frontEnd-en kocsma törlése... 
                 'permission' => 'loggedIn', // Persze ellenőrizzük ezen felül, hogy az próbál-e törölni, aki létrehozta  kocsmát
                 'childRoutes' => [

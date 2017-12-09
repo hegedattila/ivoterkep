@@ -22,8 +22,7 @@ function adminLoader(response, xhr){
     if (ct.indexOf('html') > -1) { // html
         $('#moduleMenu').empty();
         $('#moduleContent').html(response);
-    }
-    if (ct.indexOf('json') > -1) { // json
+    } else if (ct.indexOf('json') > -1) { // json
 //                if(typeof response !== 'object'){
 //                    message(':(', 'red');
 //                    return false;
@@ -32,9 +31,11 @@ function adminLoader(response, xhr){
             $('#moduleContent').html(response.VIEW);
         }
         if('SUBMENU' in response){
-            buildModuleSubMenu(response.SUBMENU); //buildmenu
-        } else {
-            $('#moduleMenu').empty();
+            if(response.SUBMENU){ // azaz nem üres
+                buildModuleSubMenu(response.SUBMENU); //buildmenu
+            } else {
+                $('#moduleMenu').empty();
+            }
         }
         if('MESSAGE' in response && response.MESSAGE !== null){
             if('msg' in response.MESSAGE){

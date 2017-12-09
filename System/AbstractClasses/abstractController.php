@@ -44,7 +44,7 @@ abstract class abstractController{
                 }
             }
         }
-        return null;
+        return end($args); // utolsó arg default
     }
     
 //    protected function checkParam($keys,$val = null) {

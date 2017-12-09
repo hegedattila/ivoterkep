@@ -6,7 +6,7 @@ use Modules\login\Form\loginForm;
 
 class loginController extends \System\AbstractClasses\abstractController{
     public function showLoginFormAction(){
-        $form = new loginForm($this->getParam(['moduleParams','formAction']));
+        $form = new loginForm($this->getParam(['moduleParams','formAction'], ['moduleConfigParams','loginFormAction'], null));
         $view = new Renderer();
         $view->setModuleView('login', 'form');
         $view->setData('form', $form);
@@ -17,9 +17,17 @@ class loginController extends \System\AbstractClasses\abstractController{
     public function showLogoutAction(){
         $view = new Renderer();
         $view->setModuleView('login', 'logout');
-        $view->setData('logoutUrl', $this->getParam(['moduleParams','formAction']));
+        $view->setData('logoutUrl', $this->getParam(['moduleParams','formAction'], ['moduleConfigParams','logoutFormAction'], null));
         $view->renderView();
         return $view->getContent();
+    }
+    
+    public function showLoginLogoutAction(){
+        if(\System\UserHandler::checkIsLoggedIn()){
+            return $this->showLogoutAction();
+        } else {
+            return $this->showLoginFormAction();
+        }
     }
     
     public function loginAction(){
