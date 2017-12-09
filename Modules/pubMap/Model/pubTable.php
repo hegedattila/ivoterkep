@@ -27,10 +27,17 @@ class pubTable extends \System\AbstractClasses\abstractDb {
         }
     }
     
-    public function add($data) {
+    public function save($data, $id = null) {
         try {
-            $sql = "INSERT INTO `pub` (comment,address,name)
-                    VALUES (:comment,:address,:name);";
+            $this->db->beginTransaction();
+            
+            $sql = "INSERT INTO `pub` (id,comment,address,name)
+                    VALUES (:id,:comment,:address,:name)
+                    ON DUPLICATE KEY UPDATE
+                        comment = VALUES(comment),
+                        address = VALUES(address),
+                        name = VALUES(name);";
+            
             $qry = $this->db->prepare($sql);
             
             $paramCont = new \System\ParameterContainer();
@@ -38,17 +45,22 @@ class pubTable extends \System\AbstractClasses\abstractDb {
             $paramCont->addParam('comment', $data['comment'],  \PDO::PARAM_STR);
             $paramCont->addParam('address', $data['address'],  \PDO::PARAM_STR);
             $paramCont->addParam('name', $data['name'],  \PDO::PARAM_STR);
+            $paramCont->addParam('id', $id,  \PDO::PARAM_INT);
             
-           // $paramCont->setEmptyValuesToNull(['active','publishdate','unpublishdate','leadimage']);
+            $paramCont->setEmptyValuesToNull();
             $paramCont->bindAll($qry);
             
             $qry->execute();
-            
-            if($qry->rowCount() == 1){
+            if($qry->rowCount() > 0){
                 $contentID = $this->db->lastInsertId();
-              //  if($this->saveContentLang($contentID, $data)){
+                if($this->saveContact($contentID, $data) &&
+                        $this->saveCoordinates($contentID, $data)// &&
+                       // $this->saveOpen($contentID, $data)
+                        ){
+                    $this->db->commit();
                     return $contentID;
-             //   }
+                }
+                $this->db->rollBack();
                 return false;
             } else {
                 return false;
@@ -59,79 +71,107 @@ class pubTable extends \System\AbstractClasses\abstractDb {
         }
     }
     
-    public function getDataToForm($cid) {
+    private function saveContact($pubId, $data) {
         try {
-            $sql = "SELECT * FROM content WHERE id = :cid;";
+            $sql = "INSERT INTO `pub_contact` (email,phone,pubId)
+                    VALUES (:email,:phone,:pid)
+                    ON DUPLICATE KEY UPDATE
+                        email = VALUES(email),
+                        phone = VALUES(phone);";
             $qry = $this->db->prepare($sql);
             
-            $qry->bindValue('cid', $cid, \PDO::PARAM_INT);
+            $paramCont = new \System\ParameterContainer();
+            
+            $paramCont->addParam('email', $data['email'],  \PDO::PARAM_STR);
+            $paramCont->addParam('phone', $data['phone'],  \PDO::PARAM_STR);
+            $paramCont->addParam('pid', $pubId,  \PDO::PARAM_INT);
+            
+            $paramCont->setEmptyValuesToNull();
+            $paramCont->bindAll($qry);
+            
+            $qry->execute();
+            return true;
+        } catch (PDOException $e) {
+           // var_dump($e->getMessage());
+            return false;
+        }
+    }
+    
+    private function saveCoordinates($pubId, $data) {
+        try {
+            $sql = "INSERT INTO `pub_coordinates` (latitude,longitude,pubId)
+                    VALUES (:lat,:long,:pid)
+                    ON DUPLICATE KEY UPDATE
+                        latitude = VALUES(latitude),
+                        longitude = VALUES(longitude);";
+            $qry = $this->db->prepare($sql);
+            
+            $paramCont = new \System\ParameterContainer();
+            
+            $paramCont->addParam('lat', $data['latitude'],  \PDO::PARAM_INT);
+            $paramCont->addParam('long', $data['longitude'],  \PDO::PARAM_INT);
+            $paramCont->addParam('pid', $pubId,  \PDO::PARAM_INT);
+            
+            $paramCont->bindAll($qry);
+            
+            $qry->execute();
+            
+            return true;
+        } catch (PDOException $e) {
+           // var_dump($e->getMessage());
+            return false;
+        }
+    }
+    
+    private function saveOpen($pubId, $data) {
+        try {
+            $sql = "INSERT INTO `pub_open`
+                (`mondayOpen`, `mondayClose`, `tuesdayOpen`, `tuesdayClose`, `wednesdayOpen`, `wednesdayClose`, `thursdayOpen`, `thursdayClose`, `fridayOpen`, `fridayClose`, `saturdayOpen`, `saturdayClose`, `sundayOpen`, `sundayClose`, `pubId`)
+                    VALUES 
+                (:mondayO, :mondayC, :tuesdayO, :tuesdayC, :wednesdayO, :wednesdayC, :thursdayO, :thursdayC, :fridayO, :fridayC, :saturdayO, :saturdayC, :sundayO, :sundayC, :pubId);";
+            $qry = $this->db->prepare($sql);
+            
+            $paramCont = new \System\ParameterContainer();
+            
+//            $paramCont->addParam('mondayO', $data['mondayO'],  \PDO::PARAM_INT);
+            $paramCont->addParam('pubId', $pubId,  \PDO::PARAM_INT);
+            
+            $paramCont->setEmptyValuesToNull();
+            $paramCont->bindAll($qry);
+            
+            $qry->execute();
+            
+            return true;
+        } catch (PDOException $e) {
+            var_dump($e->getMessage());
+            return false;
+        }
+    }
+    
+    public function getDataToForm($id) {
+        try {
+            $sql = "SELECT * FROM pub p
+                    LEFT JOIN pub_contact pc ON pc.`pubId` = p.`id`
+                    LEFT JOIN pub_coordinates pcts ON pcts.`pubId` = p.`id`
+                   -- LEFT JOIN pub_contact pc ON pc.`pubId` = p.`id`
+                   WHERE p.id = :pid;
+                    ";
+            $qry = $this->db->prepare($sql);
+            
+            $qry->bindValue('pid', $id, \PDO::PARAM_INT);
             
             $qry->execute();
             
             if($qry->rowCount() == 1){
+                
                 $data = $qry->fetch(\PDO::FETCH_ASSOC);
-                $sql_lang = "SELECT * FROM content_lang WHERE content_id = :cid";
-                $qry_l = $this->db->prepare($sql_lang);
-                $qry_l->bindValue('cid', $cid, \PDO::PARAM_INT);
-                $qry_l->execute();
-                $ld = $qry_l->fetchAll(\PDO::FETCH_ASSOC);
-                $langData = [];
                 
-                foreach ($ld as $value) {
-                    $lng = $value['lang_id'];
-                    foreach ($value as $fieldName => $v) {
-                        if(isset($langData[$fieldName])){
-                            $langData[$fieldName][$lng] = $v;
-                        } else {
-                            $langData[$fieldName] = [$lng => $v];
-                        }
-                    }
-                }
-                
-                return array_merge($data, $langData);
+                return $data;
             } else {
                 return false;
             }
         } catch (PDOException $e) {
           //  var_dump($e->getMessage());
-            return false;
-        }
-    }
-
-    public function update($id, $data) {
-        try {
-            $sql = "UPDATE `content` SET
-                    active = :active,
-                    modified_by = :modby,
-                    modified_date = :now,
-                    publish_date = :publishdate,
-                    unpublish_date = :unpublishdate,
-                    lead_image = :leadimage
-                    WHERE id = :id";
-            $qry = $this->db->prepare($sql);
-            
-            $paramCont = new \System\ParameterContainer();
-            
-            $paramCont->addParam('id', $id,  \PDO::PARAM_INT);
-            $paramCont->addParam('modby', \System\UserHandler::getUserId(),  \PDO::PARAM_INT);
-            $paramCont->addParam('active', isset($data['active'])?1:0,  \PDO::PARAM_INT);
-            $paramCont->addParam('now',dth::getNowTimestamp(),\PDO::PARAM_INT);
-            $paramCont->addParam('publishdate', dth::getTimestamp($data['publish_date'],'Y-m-d'),  \PDO::PARAM_INT);
-            $paramCont->addParam('unpublishdate', dth::getTimestamp($data['unpublish_date'],'Y-m-d'),  \PDO::PARAM_INT);
-            $paramCont->addParam('leadimage', $data['lead_image'],  \PDO::PARAM_STR);
-            
-            $paramCont->setEmptyValuesToNull(['active','publishdate','unpublishdate','leadimage']);
-            $paramCont->bindAll($qry);
-            
-            $qry->execute();
-            
-            if($qry->rowCount() == 1){
-                return $this->saveContentLang($id, $data);
-            } else {
-                return false;
-            }
-        } catch (PDOException $e) {
-         //   var_dump($e->getMessage());
             return false;
         }
     }

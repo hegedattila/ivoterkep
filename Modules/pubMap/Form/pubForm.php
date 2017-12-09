@@ -73,7 +73,43 @@ class pubForm extends \System\AbstractClasses\abstractForm{
                 'type' => 'textarea',
                 'label' => \System\Translator::translateAdmin('Labelll', 'description'),
                 'attributes' => [
-                    'class' => 'tinymce',
+                //    'class' => 'tinymce',
+                  //  'placeholder' => tr::translateModule('login', 'login', 'username')
+                ]
+            ]);
+        
+        $this->addElement('email',
+            [
+                'type' => 'text',
+                'label' => \System\Translator::translateAdmin('Labelll', 'email'),
+                'attributes' => [
+                  //  'placeholder' => tr::translateModule('login', 'login', 'username')
+                ]
+            ]);
+        
+        $this->addElement('phone',
+            [
+                'type' => 'text',
+                'label' => \System\Translator::translateAdmin('Labelll', 'phone'),
+                'attributes' => [
+                  //  'placeholder' => tr::translateModule('login', 'login', 'username')
+                ]
+            ]);
+        
+        $this->addElement('latitude',
+            [
+                'type' => 'text',
+                'label' => \System\Translator::translateAdmin('Labelll', 'lat'),
+                'attributes' => [
+                  //  'placeholder' => tr::translateModule('login', 'login', 'username')
+                ]
+            ]);
+        
+        $this->addElement('longitude',
+            [
+                'type' => 'text',
+                'label' => \System\Translator::translateAdmin('Labelll', 'lng'),
+                'attributes' => [
                   //  'placeholder' => tr::translateModule('login', 'login', 'username')
                 ]
             ]);
@@ -98,9 +134,18 @@ class pubForm extends \System\AbstractClasses\abstractForm{
 //            'excludeList' => ['value'=> ['hal']],
 //        ]);
             
-        $this->formElements['image']->validate([
+//        $this->formElements['image']->validate([
+//            'maxLength' => ['value'=> 50],
+//            'regex' => ['value'=> '/'. \System\StringHandler::REGEX_ENCHARS_AND_NUMBERS .'/'],
+//        ]);
+        
+        $this->formElements['email']->validate([
             'maxLength' => ['value'=> 50],
-            'regex' => ['value'=> '/'. \System\StringHandler::REGEX_ENCHARS_AND_NUMBERS .'/'],
+            'regex' => ['value'=> '/'. \System\StringHandler::REGEX_EMAIL .'/'],
+        ]);
+        
+        $this->formElements['phone']->validate([
+            'regex' => ['value'=> '/'. \System\StringHandler::REGEX_NUMBER .'/'],
         ]);
         
         

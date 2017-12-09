@@ -2,9 +2,9 @@
 -- version 4.5.4.1deb2ubuntu2
 -- http://www.phpmyadmin.net
 --
--- Gép: localhost
--- Létrehozás ideje: 2017. Nov 07. 10:45
--- Kiszolgáló verziója: 5.7.18-0ubuntu0.16.04.1
+-- Gép: den1.mysql5.gear.host
+-- Létrehozás ideje: 2017. Dec 09. 23:36
+-- Kiszolgáló verziója: 5.7.19-log
 -- PHP verzió: 7.0.21-1~ubuntu16.04.1+deb.sury.org+1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -74,7 +74,8 @@ CREATE TABLE `content` (
 --
 
 INSERT INTO `content` (`id`, `active`, `lead_image`, `category_id`, `created_by`, `created_date`, `modified_by`, `modified_date`, `deleted_by`, `deleted_date`, `publish_date`, `unpublish_date`) VALUES
-(1, 1, NULL, NULL, 1, 1510047601, 1, 1510047802, NULL, NULL, NULL, NULL);
+(1, 1, NULL, NULL, 1, 1510047601, 1, 1510047802, NULL, NULL, NULL, NULL),
+(2, 0, NULL, NULL, 1, 1512841165, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -104,19 +105,19 @@ INSERT INTO `content_lang` (`lang_id`, `content_id`, `enabled`, `title`, `sef`, 
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `groupsToPermissions`
+-- Tábla szerkezet ehhez a táblához `groupstopermissions`
 --
 
-CREATE TABLE `groupsToPermissions` (
+CREATE TABLE `groupstopermissions` (
   `groupId` int(10) UNSIGNED NOT NULL,
   `permId` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- A tábla adatainak kiíratása `groupsToPermissions`
+-- A tábla adatainak kiíratása `groupstopermissions`
 --
 
-INSERT INTO `groupsToPermissions` (`groupId`, `permId`) VALUES
+INSERT INTO `groupstopermissions` (`groupId`, `permId`) VALUES
 (4, 1),
 (4, 4),
 (5, 5);
@@ -186,6 +187,97 @@ INSERT INTO `permissions` (`id`, `name`, `description`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Tábla szerkezet ehhez a táblához `pub`
+--
+
+CREATE TABLE `pub` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `comment` varchar(1000) COLLATE utf8_hungarian_ci DEFAULT NULL,
+  `address` varchar(100) COLLATE utf8_hungarian_ci NOT NULL,
+  `contactId` int(10) UNSIGNED DEFAULT NULL,
+  `name` varchar(50) COLLATE utf8_hungarian_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `pub`
+--
+
+INSERT INTO `pub` (`id`, `comment`, `address`, `contactId`, `name`) VALUES
+(2, '', 'df', NULL, 'namee'),
+(20, 'kordRossz', 'addr', NULL, 'nammme');
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pub_contact`
+--
+
+CREATE TABLE `pub_contact` (
+  `email` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone` int(11) UNSIGNED DEFAULT NULL,
+  `pubId` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- A tábla adatainak kiíratása `pub_contact`
+--
+
+INSERT INTO `pub_contact` (`email`, `phone`, `pubId`) VALUES
+('wazemaki@gmail.com', 1234, 20);
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pub_coordinates`
+--
+
+CREATE TABLE `pub_coordinates` (
+  `latitude` double NOT NULL,
+  `longitude` double NOT NULL,
+  `pubId` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- A tábla adatainak kiíratása `pub_coordinates`
+--
+
+INSERT INTO `pub_coordinates` (`latitude`, `longitude`, `pubId`) VALUES
+(23234, 12, 20);
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `pub_open`
+--
+
+CREATE TABLE `pub_open` (
+  `mondayOpen` time DEFAULT NULL,
+  `mondayClose` time DEFAULT NULL,
+  `tuesdayOpen` time DEFAULT NULL,
+  `tuesdayClose` time DEFAULT NULL,
+  `wednesdayOpen` time DEFAULT NULL,
+  `wednesdayClose` time DEFAULT NULL,
+  `thursdayOpen` time DEFAULT NULL,
+  `thursdayClose` time DEFAULT NULL,
+  `fridayOpen` time DEFAULT NULL,
+  `fridayClose` time DEFAULT NULL,
+  `saturdayOpen` time DEFAULT NULL,
+  `saturdayClose` time DEFAULT NULL,
+  `sundayOpen` time DEFAULT NULL,
+  `sundayClose` time DEFAULT NULL,
+  `pubId` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- A tábla adatainak kiíratása `pub_open`
+--
+
+INSERT INTO `pub_open` (`mondayOpen`, `mondayClose`, `tuesdayOpen`, `tuesdayClose`, `wednesdayOpen`, `wednesdayClose`, `thursdayOpen`, `thursdayClose`, `fridayOpen`, `fridayClose`, `saturdayOpen`, `saturdayClose`, `sundayOpen`, `sundayClose`, `pubId`) VALUES
+(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2);
+
+-- --------------------------------------------------------
+
+--
 -- Tábla szerkezet ehhez a táblához `routes`
 --
 
@@ -201,8 +293,9 @@ CREATE TABLE `routes` (
 --
 
 INSERT INTO `routes` (`id`, `templateId`, `route`, `parameters`) VALUES
-(1, 3, 'terkep', 1),
-(2, 4, 'tartalom', 1);
+(1, 3, NULL, 0),
+(2, 4, 'tartalom', 1),
+(5, 5, 'kocsma', 1);
 
 -- --------------------------------------------------------
 
@@ -224,8 +317,18 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `created`, `modified`, `uid`, `ip4`, `stayLoggedIn`) VALUES
+('075785e54e066a280825071fd6c43061', 1512487267, 1512487294, 1, 'proba_ip', 1),
+('2fa1fdd2044f61cae1c33d11fb73b289', 1512850746, 1512853036, 1, 'proba_ip', 1),
 ('3d74a9380e0aab2a72aa40a2996a6d02', 1508845059, 1508845065, 2, 'proba_ip', 1),
-('d732c09f5d4f423e12777d9600867e36', 1510046210, 1510047814, 1, 'proba_ip', 1);
+('48a30ca8aac6e33bf83dd51233eff155', 1510049781, 1510050882, 1, 'proba_ip', 1),
+('558c56f0ee85254d4dc920dc22df0074', 1512485512, 1512492827, 1, 'proba_ip', 1),
+('5832c6d8760f341a19748d38852cc192', 1510049673, 1510049678, NULL, 'proba_ip', 1),
+('82f50cfc787accce9d8d3f53289dbef4', 1512487279, 1512487279, NULL, 'proba_ip', 1),
+('863f05d20c2ae4a4cca76f12f55f3728', 1511266490, 1511266491, 1, 'proba_ip', 1),
+('8994f33f35e879fa7830041efbc53e5f', 1512487278, 1512487278, NULL, 'proba_ip', 1),
+('bacc810fd37e1066c88dcf26583bc471', 1512857988, 1512858033, 2, 'proba_ip', 1),
+('cbbeecd7c72e50a02728b7e0d1916a03', 1510055641, 1510056781, 1, 'proba_ip', 1),
+('cd8c6f97469e07ee60cd00d9a5c0bd81', 1510659762, 1510662918, 1, 'proba_ip', 1);
 
 -- --------------------------------------------------------
 
@@ -245,16 +348,17 @@ CREATE TABLE `templates` (
 --
 
 INSERT INTO `templates` (`id`, `name`, `layoutId`, `places`) VALUES
-(3, 'terkep', 0, '{"content":[{"module":"content","action":"show","modulePart":"content","params":{}}],"section-top":[{"module":"login","action":"","modulePart":"login"},{"module":"forum","action":"route1","modulePart":"sub3"}]}'),
-(4, 'tartalom', 0, '{"content":[{"module":"content","action":"show","modulePart":"content","params":{}}]}');
+(3, 'terkep', 0, '{"content":[{"module":"pubMap","action":"showMap","modulePart":"map"}],"section-top":[{"module":"login","action":"","modulePart":"login"}]}'),
+(4, 'tartalom', 0, '{"content":[{"module":"content","action":"show","modulePart":"content","params":{}}]}'),
+(5, 'kocsma', 0, '{"content":[{"module":"pubMap","action":"showPub","modulePart":"pub"}]}');
 
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `userGroups`
+-- Tábla szerkezet ehhez a táblához `usergroups`
 --
 
-CREATE TABLE `userGroups` (
+CREATE TABLE `usergroups` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(45) NOT NULL,
   `description` varchar(150) DEFAULT NULL,
@@ -262,10 +366,10 @@ CREATE TABLE `userGroups` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- A tábla adatainak kiíratása `userGroups`
+-- A tábla adatainak kiíratása `usergroups`
 --
 
-INSERT INTO `userGroups` (`id`, `name`, `description`, `adminAccess`) VALUES
+INSERT INTO `usergroups` (`id`, `name`, `description`, `adminAccess`) VALUES
 (3, 'vezetoseg', 'Vezetoségi Tagok', 0),
 (4, 'admin', 'Az oldal Admin felhasználói', 1),
 (5, 'superadmin', 'Szuper Adminnnn mindent megteheet', 1);
@@ -301,19 +405,19 @@ INSERT INTO `users` (`id`, `nick`, `fullName`, `email`, `regDate`, `lastDate`, `
 -- --------------------------------------------------------
 
 --
--- Tábla szerkezet ehhez a táblához `usersToGroups`
+-- Tábla szerkezet ehhez a táblához `userstogroups`
 --
 
-CREATE TABLE `usersToGroups` (
+CREATE TABLE `userstogroups` (
   `userId` int(10) UNSIGNED NOT NULL,
   `groupId` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- A tábla adatainak kiíratása `usersToGroups`
+-- A tábla adatainak kiíratása `userstogroups`
 --
 
-INSERT INTO `usersToGroups` (`userId`, `groupId`) VALUES
+INSERT INTO `userstogroups` (`userId`, `groupId`) VALUES
 (1, 5),
 (2, 5),
 (3, 5);
@@ -355,9 +459,9 @@ ALTER TABLE `content_lang`
   ADD KEY `content_id` (`content_id`);
 
 --
--- A tábla indexei `groupsToPermissions`
+-- A tábla indexei `groupstopermissions`
 --
-ALTER TABLE `groupsToPermissions`
+ALTER TABLE `groupstopermissions`
   ADD UNIQUE KEY `ids` (`groupId`,`permId`),
   ADD KEY `permission_idx` (`permId`);
 
@@ -381,6 +485,31 @@ ALTER TABLE `permissions`
   ADD UNIQUE KEY `name_UNIQUE` (`name`);
 
 --
+-- A tábla indexei `pub`
+--
+ALTER TABLE `pub`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `contactId` (`contactId`);
+
+--
+-- A tábla indexei `pub_contact`
+--
+ALTER TABLE `pub_contact`
+  ADD PRIMARY KEY (`pubId`) USING BTREE;
+
+--
+-- A tábla indexei `pub_coordinates`
+--
+ALTER TABLE `pub_coordinates`
+  ADD PRIMARY KEY (`pubId`) USING BTREE;
+
+--
+-- A tábla indexei `pub_open`
+--
+ALTER TABLE `pub_open`
+  ADD PRIMARY KEY (`pubId`) USING BTREE;
+
+--
 -- A tábla indexei `routes`
 --
 ALTER TABLE `routes`
@@ -402,9 +531,9 @@ ALTER TABLE `templates`
   ADD KEY `layoutId` (`layoutId`);
 
 --
--- A tábla indexei `userGroups`
+-- A tábla indexei `usergroups`
 --
-ALTER TABLE `userGroups`
+ALTER TABLE `usergroups`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -417,9 +546,9 @@ ALTER TABLE `users`
   ADD KEY `langId` (`langId`);
 
 --
--- A tábla indexei `usersToGroups`
+-- A tábla indexei `userstogroups`
 --
-ALTER TABLE `usersToGroups`
+ALTER TABLE `userstogroups`
   ADD UNIQUE KEY `ids` (`userId`,`groupId`),
   ADD KEY `gid` (`groupId`);
 
@@ -436,7 +565,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT a táblához `content`
 --
 ALTER TABLE `content`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT a táblához `languages`
 --
@@ -453,19 +582,24 @@ ALTER TABLE `layouts`
 ALTER TABLE `permissions`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
+-- AUTO_INCREMENT a táblához `pub`
+--
+ALTER TABLE `pub`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+--
 -- AUTO_INCREMENT a táblához `routes`
 --
 ALTER TABLE `routes`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT a táblához `templates`
 --
 ALTER TABLE `templates`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
--- AUTO_INCREMENT a táblához `userGroups`
+-- AUTO_INCREMENT a táblához `usergroups`
 --
-ALTER TABLE `userGroups`
+ALTER TABLE `usergroups`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT a táblához `users`
@@ -500,11 +634,29 @@ ALTER TABLE `content_lang`
   ADD CONSTRAINT `content_lang_ibfk_2` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Megkötések a táblához `groupsToPermissions`
+-- Megkötések a táblához `groupstopermissions`
 --
-ALTER TABLE `groupsToPermissions`
-  ADD CONSTRAINT `group` FOREIGN KEY (`groupId`) REFERENCES `userGroups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ALTER TABLE `groupstopermissions`
+  ADD CONSTRAINT `group` FOREIGN KEY (`groupId`) REFERENCES `usergroups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `permission` FOREIGN KEY (`permId`) REFERENCES `permissions` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Megkötések a táblához `pub_contact`
+--
+ALTER TABLE `pub_contact`
+  ADD CONSTRAINT `pub_contact_ibfk_1` FOREIGN KEY (`pubId`) REFERENCES `pub` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Megkötések a táblához `pub_coordinates`
+--
+ALTER TABLE `pub_coordinates`
+  ADD CONSTRAINT `pub_coordinates_ibfk_1` FOREIGN KEY (`pubId`) REFERENCES `pub` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Megkötések a táblához `pub_open`
+--
+ALTER TABLE `pub_open`
+  ADD CONSTRAINT `pub_open_ibfk_1` FOREIGN KEY (`pubId`) REFERENCES `pub` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Megkötések a táblához `routes`
@@ -531,11 +683,11 @@ ALTER TABLE `users`
   ADD CONSTRAINT `lang` FOREIGN KEY (`langId`) REFERENCES `languages` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Megkötések a táblához `usersToGroups`
+-- Megkötések a táblához `userstogroups`
 --
-ALTER TABLE `usersToGroups`
+ALTER TABLE `userstogroups`
   ADD CONSTRAINT `usersToGroups_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `usersToGroups_ibfk_2` FOREIGN KEY (`groupId`) REFERENCES `userGroups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `usersToGroups_ibfk_2` FOREIGN KEY (`groupId`) REFERENCES `usergroups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
