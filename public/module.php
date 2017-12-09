@@ -1,8 +1,9 @@
 <?php
-if(empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
-    header("Refresh:0; url=/");
-    die();
-}
+//if(empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest') {
+//    header("Refresh:0; url=/");
+//    die();
+//}
+// TEST
 
 chdir(dirname(__DIR__));
 
