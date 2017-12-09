@@ -22,11 +22,13 @@ class pubMap extends \System\AbstractClasses\abstractController{
         return $view->getContent();
     }
     
+    // egyetlen kocsma adatait adja
     public function showPubAction(){
         $view = new Renderer();
         $pubSef = $this->getParam(['moduleRouteParams','pub'],['routeParams',-1]);
         
-        // adatok lekérdezése DB-ből...
+        //---> adatok lekérdezése DB-ből...
+        $data = $this->getTable()->getPub($pubSef);
         
         $view->setModuleView('pubMap', 'pub');
         $view->setData('valami', $pubSef);
@@ -39,5 +41,28 @@ class pubMap extends \System\AbstractClasses\abstractController{
             return $window->getContent();
         }
         return $view->getContent();
+    }
+    
+    public function pubListAction(){
+        $this->setHeaderDataType('JSON');
+        $params = $this->getParam('POSTParams');
+        $list = $this->getTable()->getPubList($params);
+        return json_encode([
+                [
+                'x-coord'=>1.22234,
+                'y-coord'=>3.156,
+                'name'=>'asd',
+                ],
+                [
+                'x-coord'=>1.2245,
+                'y-coord'=>3.156,
+                'name'=>'dfg',
+                ],
+                [
+                'x-coord'=>1.24234,
+                'y-coord'=>3.156,
+                'name'=>'sdf',
+                ],
+        ]);
     }
 }

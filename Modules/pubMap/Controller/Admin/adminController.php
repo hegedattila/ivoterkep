@@ -37,7 +37,7 @@ class adminController extends \System\AbstractClasses\abstractController{
         $submenu = [
             ['label' => 'New', 'icon' => 'plus-circle', 'action' => 'pubMap/admin/form/add'],
         ];
-        $listData = \Admin\Classes\ListHandler::prepareList($data, 'pubMap', 'pubs', 'id', $setButtons);
+        $listData = \Admin\Classes\ListHandler::prepareList($data, 'pubMap', 'pubList', 'id', $setButtons);
         $listData['massbuttons'] = [
             [
             'text' => tr::translateGlob('common', 'deleteSelected'),
@@ -59,32 +59,61 @@ class adminController extends \System\AbstractClasses\abstractController{
         return json_encode(['VIEW'=>$view->getContent() ]);
     }
     
-    public function editFormAction(){
-        $this->setHeaderDataType('JSON');
-        $msg = null;
-        $view = new \System\Renderer();
-        $id = $this->getParam(['moduleRouteParams','id']);
-        if(is_numeric($id)){
-            $data = $this->getTable()->getDataToForm($id);
-            if($data){
-                $form = new \Modules\content\Form\contentForm('/____/pubMap/admin/save/' . $id);
-                $form->setValues( $data );
-                $view->setData('form', $form);
-                $view->setModuleView('content','contentFormView');
-                $view->renderView();
-            } else {
-                $msg = ['msg'=>'DB Hiba','color'=>'red'];
-            }
-        } else {
-            $msg = ['msg'=>'noId','color'=>'red'];
-        }
-        return json_encode([ 'MESSAGE'=>$msg, 'VIEW'=>$view->getContent() ]);
-    }
+//    public function editFormAction(){
+//        $this->setHeaderDataType('JSON');
+//        $msg = null;
+//        $view = new \System\Renderer();
+//        $id = $this->getParam(['moduleRouteParams','id']);
+//        if(is_numeric($id)){
+//            $data = $this->getTable()->getDataToForm($id);
+//            if($data){
+//                $form = new \Modules\pubMap\Form\pubForm('/____/pubMap/admin/save/' . $id);
+//                $form->setValues( $data );
+//                $view->setData('form', $form);
+//                $view->setModuleView('content','contentFormView');
+//                $view->renderView();
+//            } else {
+//                $msg = ['msg'=>'DB Hiba','color'=>'red'];
+//            }
+//        } else {
+//            $msg = ['msg'=>'noId','color'=>'red'];
+//        }
+//        return json_encode([ 'MESSAGE'=>$msg, 'VIEW'=>$view->getContent() ]);
+//    }
     
     public function addAction(){
         $this->setHeaderDataType('JSON');
-        $message = ['msg'=>'Az action (addAction) nincs létrehozva.. kérlek, tedd meg ;)','color'=>'red'];
-        return json_encode(['INVALIDINPUTS'=>null, 'MESSAGE'=>$message, 'REDIRECT'=>null]);
+        $form = new \Modules\pubMap\Form\pubForm();
+        $formData = $this->getParam('POSTParams');
+        $form->setValues($formData);
+        $msg = [];
+        $redir = null;
+        $invalidFormInputs = null;
+        $newId = NULL;
+        if($form->validateForm()){
+            $formData['lead_image'] = null;
+          //  $uploader = new \System\UploadHandler('content_leadimage', 'lead_image');
+//            if($uploader->upload()){
+//                $uploaded = $uploader->getSavedFilenames('lead_image');
+//                if(isset($uploaded['lim']) && is_string($uploaded['lim'])){
+//                    $formData['lead_image'] = $uploaded['lim'];
+//                }
+//            } else {
+//                $msg[] = ['msg' => 'Egy vagy több képet nem sikerült feltölteni:<br>'.
+//                    $uploader->getMessage('lead_image'),'color' => 'red'];
+//            }
+            $newId = $this->getTable()->add( $formData );
+            if($newId) {
+                $msg[] = ['msg'=>'Sikeres művelet','color'=>'green'];
+                $redir = ['url'=>'pubMap/admin/form/' . $newId];
+            } else {
+                $msg[] = ['msg'=>'DB Hiba','color'=>'red'];
+            }
+        } else {
+            $msg[] = ['msg'=>'InvalidForm','color'=>'red'];
+            $invalidFormInputs = $form->getInvalidElements();
+        }
+        return json_encode(['INVALIDINPUTS'=>$invalidFormInputs, 'MESSAGE'=>$msg, 'REDIRECT'=>$redir]);
     }
         
     public function editAction(){
@@ -95,7 +124,21 @@ class adminController extends \System\AbstractClasses\abstractController{
         
     public function deleteAction(){
         $this->setHeaderDataType('JSON');
-        $message = ['msg'=>'Az action (deleteAction) nincs létrehozva.. kérlek, tedd meg ;)','color'=>'red'];
-        return json_encode(['INVALIDINPUTS'=>null, 'MESSAGE'=>$message, 'REDIRECT'=>null]);
+        $msg = null;
+        $redir = null;
+        $id = $this->getParam(['moduleRouteParams','id'],['POSTParams','list']);
+        if(isset($id)){
+            $dbResult = $this->getTable()->delete($id);
+            if($dbResult) {
+                $msg = ['msg'=>'Sikeres művelet', 'color'=>'green'];
+                $redir = ['url'=>'pubMap/admin'];
+            } else {
+                $msg = ['msg'=>'DB Hiba', 'color'=>'red'];
+            }
+        } else {
+            $msg = ['msg'=>'noId', 'color'=>'red'];
+        }
+        
+        return json_encode(['MESSAGE'=>$msg, 'REDIRECT'=>$redir]);
     }
 }
