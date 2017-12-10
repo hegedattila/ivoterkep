@@ -1,1 +1,29 @@
-Filter view
+<div id="filter-sidebar" class="color-dark">
+  <div id="filter-container">
+    <div class="filter-entry-container">
+      <div class="filter-label-container">
+        <span class="label-text color-dark">
+          Nyitvatartás
+        </span>
+      </div>
+      <input type="date" name="date" class="box-element input-field input-field-text" style="margin-top: 4px">
+      
+      <div style="display: flex; flex-direction: row; margin-top: 4px">
+        <input type="time" name="time" class="box-element input-field input-field-text" style="">
+        <input type="button" value="Most" onClick="setToCurrentTime()" class="submit-button" style="margin: 0px; margin-left: auto;">
+      </div>
+      
+    </div>
+    <div class="filter-entry-container">
+      <div class="filter-label-container">
+        <span class="label-text color-dark">
+          Max. sör egységár(Ft/liter)
+        </span>
+      </div>
+      
+      <input type="range" name="ár" min="0" step="10" max="1001" value="1001">
+      <div class="filter-label" id="SliderValue"></div>
+    </div>
+  </div>
+  <input type="button" id="filter-button" class="submit-button" style="display: inline; margin: 10px 5px 10px 5px;" onClick="refreshMap()" value="Szűrés">
+</div>
