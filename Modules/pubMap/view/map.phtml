@@ -1,56 +1,107 @@
-<script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer>
-//zoli key=AIzaSyBzweJ_v8LC93Np20uBUbgZiO1tELZ-cl0&
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBzweJ_v8LC93Np20uBUbgZiO1tELZ-cl0&callback=initMap" async defer>
+//zoli 
 </script>
 <script>
     var map;
 
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {
-      lat: 47.532300,
-      lng: 21.629500
-    },
-    zoom: 16,
-    disableDoubleClickZoom: true,
-    disableDefaultUI: true,
-    gestureHandling: "greedy",
-    clickableIcons: false,
-    styles: [{
-      featureType: 'poi.business',
-      elementType: 'all',
-      stylers: [{
-        visibility: 'off'
-      }]
-    }, {
-      featureType: 'poi.park',
-      elementType: 'labels.icon',
-      stylers: [{
-        visibility: 'off'
-      }]
-    }]
-  });
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: {
+                lat: 47.532300,
+                lng: 21.629500
+            },
+            zoom: 12,
+            disableDoubleClickZoom: true,
+            disableDefaultUI: true,
+            gestureHandling: "greedy",
+            clickableIcons: false,
+            styles: [{
+                    featureType: 'poi.business',
+                    elementType: 'all',
+                    stylers: [{
+                            visibility: 'off'
+                        }]
+                }, {
+                    featureType: 'poi.park',
+                    elementType: 'labels.icon',
+                    stylers: [{
+                            visibility: 'off'
+                        }]
+                }]
+        });
 
-  map.addListener('dragend', mapEventHandler);
-  map.addListener('zoom_changed', mapEventHandler);
+        map.addListener('dragend', refreshList);
+        map.addListener('zoom_changed', refreshList);
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-      //map.setCenter(pos);
-      map.setZoom(17);
-      //console.log('User origin is: ' + map.getCenter().toString());
-    });
-  }
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                map.setCenter(pos);
+                map.setZoom(17);
+                //console.log('User origin is: ' + map.getCenter().toString());
+            });
+        }
+        
+        window.setTimeout(refreshList, 500);
+    }
+    var markers = [];
 
-}
+    function refreshList() {
+        var bounds = map.getBounds();
+        $.post(
+                '/____/pubMap/getList',
+                {
+                    day:0,
+                    minLat: bounds.f.b,
+                    minLong: bounds.b.b,
+                    maxLat: bounds.f.f,
+                    maxLong: bounds.b.f,
+                },
+                function (data) {
+                  //  deleteMarkers();
+                    $.each(data, function (key, val) {
+                        addMarker({lat: Number(val.lat), lng: Number(val.lng)}, val.name);
+                    });
+                }
+        );
+        //console.log('New origin is: ' + map.getCenter());
+    }
+    
+    function addMarker(location, name, id) {
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map,
+            title: name
+        });
+        marker.addListener('click', function() {
+            makePopUp('/____/pubMap/showPub/'+id);
+        });
+        markers.push(marker);
+    }
 
-function mapEventHandler() {
-  //console.log('New origin is: ' + map.getCenter().toString());
-  //console.log('New bounds are: ' + map.getBounds().toString());
-}
+    // Sets the map on all markers in the array.
+    function setMapOnAll(map) {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+        }
+    }
+
+    function clearMarkers() {
+        setMapOnAll(null);
+    }
+
+    function showMarkers() {
+        setMapOnAll(map);
+    }
+
+    function deleteMarkers() {
+        clearMarkers();
+        markers = [];
+    }
+
 </script>
 <div id="map"></div>
 <?= $this->get('valami'); ?>

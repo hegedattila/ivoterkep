@@ -49,24 +49,8 @@ class pubMap extends \System\AbstractClasses\abstractController{
     public function pubListAction(){
         $this->setHeaderDataType('JSON');
         $params = $this->getParam('POSTParams');
-//        $list = $this->getTable()->getPubList($params);
-//        var_dump($list);
-        return json_encode([
-                [
-                'lat'=>1.22234,
-                'long'=>3.156,
-                'name'=>'asd',
-                ],
-                [
-                'lat'=>1.2245,
-                'long'=>3.156,
-                'name'=>'dfg',
-                ],
-                [
-                'lat'=>1.24234,
-                'long'=>3.156,
-                'name'=>'sdf',
-                ],
-        ]);
+        $list = $this->getTable()->getPubList($params);
+       // var_dump($params);
+        return json_encode($list);
     }
 }
