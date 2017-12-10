@@ -305,6 +305,9 @@ fieldset {
     content: "\f057";
     color: red; }
 
+#img_preview img {
+  max-width: 100%; }
+
 input:not([type="checkbox"]), textarea {
   padding: .3em;
   width: 100%;

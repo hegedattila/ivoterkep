@@ -23,7 +23,7 @@ class pubForm extends \System\AbstractClasses\abstractForm{
             [
                 'type' => 'file',
               //  'tooltip' => tr::translateAdmin('tooltip', 'tippp'),
-                'label' => \System\Translator::translateAdmin('Labelll', 'image'),
+                'label' => 'Kép',
                 'attributes' => [
                     'multiple' => false,
                   //  'placeholder' => tr::translateModule('login', 'login', 'username')
@@ -34,7 +34,7 @@ class pubForm extends \System\AbstractClasses\abstractForm{
             [
                 'type' => 'checkbox',
               //  'tooltip' => tr::translateAdmin('tooltip', 'tippp'),
-                'label' => \System\Translator::translateAdmin('Labelll', 'noImage'),
+                'label' => 'Kép törlése',
                 'attributes' => [
                     'class' => 'hideElements',
                     'value' => 1
@@ -44,7 +44,7 @@ class pubForm extends \System\AbstractClasses\abstractForm{
         $this->addElement('name',
             [
                 'type' => 'text',
-                'label' => tr::translateModule('pubMap', '', 'name'),
+                'label' => 'Név',
                 'attributes' => [
                   //  'placeholder' => tr::translateModule('login', 'login', 'username')
                 ]
@@ -53,7 +53,16 @@ class pubForm extends \System\AbstractClasses\abstractForm{
         $this->addElement('sef',
             [
                 'type' => 'text',
-                'label' => \System\Translator::translateAdmin('Labelll', 'sef'),
+                'label' => 'keresőbarát cím',
+                'attributes' => [
+                  //  'placeholder' => tr::translateModule('login', 'login', 'username')
+                ]
+            ]);
+        
+        $this->addElement('cheapestBeer',
+            [
+                'type' => 'number',
+                'label' => 'Legolcsóbb sör ára',
                 'attributes' => [
                   //  'placeholder' => tr::translateModule('login', 'login', 'username')
                 ]
@@ -62,7 +71,7 @@ class pubForm extends \System\AbstractClasses\abstractForm{
         $this->addElement('address',
             [
                 'type' => 'text',
-                'label' => \System\Translator::translateAdmin('Labelll', 'address'),
+                'label' => 'Cím',
                 'attributes' => [
                   //  'placeholder' => tr::translateModule('login', 'login', 'username')
                 ]
@@ -71,7 +80,7 @@ class pubForm extends \System\AbstractClasses\abstractForm{
         $this->addElement('comment',
             [
                 'type' => 'textarea',
-                'label' => \System\Translator::translateAdmin('Labelll', 'description'),
+                'label' => 'Leírás',
                 'attributes' => [
                 //    'class' => 'tinymce',
                   //  'placeholder' => tr::translateModule('login', 'login', 'username')
@@ -80,8 +89,8 @@ class pubForm extends \System\AbstractClasses\abstractForm{
         
         $this->addElement('email',
             [
-                'type' => 'text',
-                'label' => \System\Translator::translateAdmin('Labelll', 'email'),
+                'type' => 'email',
+                'label' => 'E-mail',
                 'attributes' => [
                   //  'placeholder' => tr::translateModule('login', 'login', 'username')
                 ]
@@ -89,8 +98,8 @@ class pubForm extends \System\AbstractClasses\abstractForm{
         
         $this->addElement('phone',
             [
-                'type' => 'text',
-                'label' => \System\Translator::translateAdmin('Labelll', 'phone'),
+                'type' => 'phone',
+                'label' => 'Telefon',
                 'attributes' => [
                   //  'placeholder' => tr::translateModule('login', 'login', 'username')
                 ]
@@ -99,7 +108,7 @@ class pubForm extends \System\AbstractClasses\abstractForm{
         $this->addElement('latitude',
             [
                 'type' => 'text',
-                'label' => \System\Translator::translateAdmin('Labelll', 'lat'),
+                'label' => 'GPS szél.',
                 'attributes' => [
                   //  'placeholder' => tr::translateModule('login', 'login', 'username')
                 ]
@@ -108,7 +117,7 @@ class pubForm extends \System\AbstractClasses\abstractForm{
         $this->addElement('longitude',
             [
                 'type' => 'text',
-                'label' => \System\Translator::translateAdmin('Labelll', 'lng'),
+                'label' => 'GPS hossz.',
                 'attributes' => [
                   //  'placeholder' => tr::translateModule('login', 'login', 'username')
                 ]
@@ -184,6 +193,10 @@ class pubForm extends \System\AbstractClasses\abstractForm{
             'maxLength' => ['value'=> 50],
             'regex' => ['value'=> '/'. \System\StringHandler::REGEX_ENCHARS_AND_NUMBERS .'/'],
         ]);
+        $this->formElements['cheapestBeer']->validate([
+            'regex' => ['value'=> '/'. \System\StringHandler::REGEX_NUMBER .'/', 'errMsg'=>'Az érték csak szám lehet!'],
+        ]);
+        
         $this->formElements['latitude']->validate([
             'emptyDisabled' => ['value'=> true, 'errMsg'=>'Üres Érték!'],
             'regex' => ['value'=> '/'. \System\StringHandler::REGEX_NUMBER_AND_POINT .'/', 'errMsg'=>'Az érték csak szám lehet!'],

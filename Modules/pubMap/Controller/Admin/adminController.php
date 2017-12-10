@@ -91,8 +91,7 @@ class adminController extends \System\AbstractClasses\abstractController{
         $invalidFormInputs = null;
         $newId = NULL;
         if($form->validateForm()){
-            if($_FILES['image']){
-                $formData['image'] = null;
+            if(isset($_FILES['image'])){
                 $uploader = new \System\UploadHandler('pub_image', 'image');
                 if($uploader->upload()){
                     $uploaded = $uploader->getSavedFilenames('image');
@@ -101,7 +100,7 @@ class adminController extends \System\AbstractClasses\abstractController{
                     }
                 } else {
                     $msg[] = ['msg' => 'Egy vagy több képet nem sikerült feltölteni:<br>'.
-                        $uploader->getMessage('lead_image'),'color' => 'red'];
+                        $uploader->getMessage('image'),'color' => 'red'];
                 }
             }
             $newId = $this->getTable()->save( $formData );
@@ -129,8 +128,7 @@ class adminController extends \System\AbstractClasses\abstractController{
         $invalidFormInputs = null;
         $dbResult = false;
         if($form->validateForm()){
-            if($_FILES['image']){
-                $formData['image'] = null;
+            if(isset($_FILES['image'])){
                 $uploader = new \System\UploadHandler('pub_image', 'image');
                 if($uploader->upload()){
                     $uploaded = $uploader->getSavedFilenames('image');
@@ -138,11 +136,11 @@ class adminController extends \System\AbstractClasses\abstractController{
                         $formData['image'] = $uploaded['img'];
                     } else {
                         $msg[] = ['msg' => 'Egy vagy több képet nem sikerült feltölteni:<br>'.
-                            $uploader->getMessage('lead_image'),'color' => 'red'];
+                            $uploader->getMessage('image'),'color' => 'red'];
                     }
                 } else {
                     $msg[] = ['msg' => 'Egy vagy több képet nem sikerült feltölteni:<br>'.
-                        $uploader->getMessage('lead_image'),'color' => 'red'];
+                        $uploader->getMessage('image'),'color' => 'red'];
                 }
             }
             $dbResult = $this->getTable()->save($formData, $cont_id );

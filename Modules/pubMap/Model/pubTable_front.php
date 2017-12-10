@@ -96,14 +96,11 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
             $paramCont = new \System\ParameterContainer();
             
             $paramCont->addParam('key', $id_vagy_sef, \PDO::PARAM_STR);
-            $paramCont->addParam('now', date('H:i:s'), \PDO::PARAM_STR);
             
-            $day = strtolower(date('l'));
-            $sql = "SELECT *, (:now BETWEEN po.".$day."Open AND po.".$day."Close) as opened
+            $sql = "SELECT *
                     FROM pub p
                     LEFT JOIN pub_coordinates c ON c.pubId = p.id
                     LEFT JOIN pub_contact ct ON ct.pubId = p.id
-                    LEFT JOIN pub_open po ON po.pubId = p.id
                     WHERE `id` = :key OR `sef` LIKE :key";
             
             $qry = $this->db->prepare($sql);
@@ -111,9 +108,55 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
             $paramCont->bindAll($qry);
                         
             $qry->execute();
-            
-            return $qry->fetch(\PDO::FETCH_ASSOC);
+            $data = $qry->fetch(\PDO::FETCH_ASSOC);
+            return array_merge($data,$this->getOpens($data['id']));
             //...
+        } catch (PDOException $e) {
+          //  var_dump($e->getMessage());
+            return false;
+        }
+    }
+    
+    private function getOpens($id) {
+        try {
+            $day = strtolower(date('l'));
+            $sql = "SELECT *, (:now BETWEEN ".$day."Open AND ".$day."Close) as opened
+                FROM pub_open WHERE pubId = :pid;";
+            $qry = $this->db->prepare($sql);
+            
+            $qry->bindValue('now', date('H:i:s'), \PDO::PARAM_INT);
+            $qry->bindValue('pid', $id, \PDO::PARAM_INT);
+            
+            $qry->execute();
+            
+            if($qry->rowCount() == 1){
+                
+                $data = $qry->fetch(\PDO::FETCH_ASSOC);
+                $out = [
+                    'open' => [
+                        'monday' => $data['mondayOpen'],
+                        'tuesday' => $data['tuesdayOpen'],
+                        'wednesday' => $data['wednesdayOpen'],
+                        'thursday' => $data['thursdayOpen'],
+                        'friday' => $data['fridayOpen'],
+                        'saturday' => $data['saturdayOpen'],
+                        'sunday' => $data['sundayOpen']
+                    ],
+                    'close' => [
+                        'monday' => $data['mondayClose'],
+                        'tuesday' => $data['tuesdayClose'],
+                        'wednesday' => $data['wednesdayClose'],
+                        'thursday' => $data['thursdayClose'],
+                        'friday' => $data['fridayClose'],
+                        'saturday' => $data['saturdayClose'],
+                        'sunday' => $data['sundayClose']
+                    ],
+                ];
+                
+                return $out;
+            } else {
+                return false;
+            }
         } catch (PDOException $e) {
           //  var_dump($e->getMessage());
             return false;

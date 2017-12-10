@@ -172,7 +172,7 @@ class UploadHandler {
 //            return true;
 //        }
         if($file['error'] > 0){
-            $this->messages[$key] = self::ERR_UPL_ . $file['error'];
+            $this->messages[$key] = constant('self::ERR_UPL_' . $file['error']);
             $this->error = true;
             return true;
         }

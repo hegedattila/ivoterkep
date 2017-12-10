@@ -125,7 +125,7 @@ return [
             'id' => ['type' => 'number', 'emptyValue' => '', 'sortable' => true, 'searchable' => true,'label' => 'ID'],
             'name' => ['type' => 'text', 'emptyValue' => '', 'sortable' => true, 'searchable' => true,'label' => 'Name'],
             'address' => ['type' => 'text', 'emptyValue' => '', 'sortable' => true, 'searchable' => true,'label' => 'Address'],
-            'nick' => ['type' => 'text', 'emptyValue' => '', 'sortable' => false, 'searchable' => false,'label' => 'Nick'],
+            'sef' => ['type' => 'text', 'emptyValue' => '', 'sortable' => true, 'searchable' => true,'label' => 'SEF'],
       //      'mezo6' => ['type' => 'text', 'emptyValue' => '', 'sortable' => true, 'searchable' => true,'label' => 'L6'],
         ],
     ],

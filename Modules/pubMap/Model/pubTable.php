@@ -10,7 +10,7 @@ class pubTable extends \System\AbstractClasses\abstractDb {
             $helper = new \Admin\Classes\SqlListHelper($params,['name','address']);
             $fields = ($count)?
                     'COUNT( DISTINCT p.id )':
-                    'DISTINCT p.id, p.name, p.address';
+                    'DISTINCT p.id, p.name, p.address, p.sef';
             
             $sql = 'SELECT ' . $fields . ' FROM pub p
                  --  LEFT JOIN users u ON u.id = p.created_by
@@ -31,13 +31,21 @@ class pubTable extends \System\AbstractClasses\abstractDb {
         try {
             $this->db->beginTransaction();
             
-            $sql = "INSERT INTO `pub` (id,comment,address,name,sef)
-                    VALUES (:id,:comment,:address,:name,:sef)
+            $sql = "INSERT INTO `pub` (id,comment,address,name,sef,imagePath,cheapestBeer)
+                    VALUES (:id,:comment,:address,:name,:sef,:imagePath,:cb)
                     ON DUPLICATE KEY UPDATE
                         comment = VALUES(comment),
                         address = VALUES(address),
                         sef = VALUES(sef),
-                        name = VALUES(name);";
+                        cheapestBeer = VALUES(cheapestBeer),
+                        name = VALUES(name)";
+            
+            if(isset($data['no_image'])){
+                $sql .= ", imagePath = NULL";
+                $data['image'] = null;
+            } elseif($data['image'] && $data['image'] !== ''){
+                $sql .= ", imagePath = VALUES(imagePath)";
+            }
             
             $qry = $this->db->prepare($sql);
             
@@ -47,6 +55,8 @@ class pubTable extends \System\AbstractClasses\abstractDb {
             $paramCont->addParam('address', $data['address'],  \PDO::PARAM_STR);
             $paramCont->addParam('name', $data['name'],  \PDO::PARAM_STR);
             $paramCont->addParam('sef', $data['sef'],  \PDO::PARAM_STR);
+            $paramCont->addParam('cb', $data['cheapestBeer'],  \PDO::PARAM_STR);
+            $paramCont->addParam('imagePath', $data['image'],  \PDO::PARAM_STR);
             $paramCont->addParam('id', $id,  \PDO::PARAM_INT);
             
             $paramCont->setEmptyValuesToNull();
@@ -74,6 +84,7 @@ class pubTable extends \System\AbstractClasses\abstractDb {
             $this->db->rollBack();
             return false;
         } catch (PDOException $e) {
+            $this->db->rollBack();
           //  var_dump($e->getMessage());
             return false;
         }

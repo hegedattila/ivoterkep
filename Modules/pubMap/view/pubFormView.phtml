@@ -7,13 +7,13 @@
         <div class="c12 colpadding">
             <?= $form->formElement('name'); ?>
         </div>
-        <div class="c2 colpadding clear">
+        <div class="c4 colpadding clear">
             <div class="leadIm">
                 <?= $form->formElement('image'); ?>
             </div>
             <?= $form->formElement('no_image'); ?>
         </div>
-        <div id="img_preview" class="c10">
+        <div id="img_preview" class="c8">
             <img id="previewimg" src="">
         </div>
         <div class="c12 colpadding">
@@ -22,8 +22,11 @@
         <div class="c12 colpadding">
             <?= $form->formElement('comment'); ?>
         </div>
-        <div class="c12 colpadding">
+        <div class="c6 colpadding">
             <?= $form->formElement('sef'); ?>
+        </div>
+        <div class="c6 colpadding">
+            <?= $form->formElement('cheapestBeer'); ?>
         </div>
     </fieldset>
     <fieldset>
@@ -86,7 +89,7 @@
                     }
                 })
                 .hideElements([
-                    {element: '#no_lead_image', values: [true], hideElements: '.leadIm,#img_preview'}
+                    {element: '#no_image', values: [true], hideElements: '.leadIm,#img_preview'}
                 ]);
 
         $(".tinymce").tinymce({
