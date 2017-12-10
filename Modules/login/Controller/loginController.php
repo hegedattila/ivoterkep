@@ -8,7 +8,8 @@ class loginController extends \System\AbstractClasses\abstractController{
     public function showLoginFormAction(){
         $form = new loginForm($this->getParam(['moduleParams','formAction'], ['moduleConfigParams','loginFormAction'], null));
         $view = new Renderer();
-        $view->setModuleView('login', 'form');
+        $viewName = $this->getParam(['moduleParams','view'],'form');
+        $view->setModuleView('login', $viewName);
         $view->setData('form', $form);
         $view->renderView();
         return $view->getContent();
