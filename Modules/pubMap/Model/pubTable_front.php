@@ -60,13 +60,22 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
             }
             
             
-            $sql = 'SELECT *'
+            $sql = 'IF :open > :close'
+                    . ' SELECT *'
                     . ' FROM pub p'
                     . ' OUTER JOIN pub_coordinates c ON c.id = p.coordinatesId'
                     . ' OUTER JOIN pub_contact ct ON ct.id = p.contactId'
                     . ' WHERE (`latitude` BETWEEN :min_lat AND :max_lat),'
                     . ' AND (`longitude` BETWEEN :min_long AND :max_long),'
-                    . ' AND (:hour BETWEEN :open AND :close)';
+                    . ' AND (:hour NOT BETWEEN :close AND :open);'
+                    . ' ELSE'
+                    . ' SELECT *'
+                    . ' FROM pub p'
+                    . ' OUTER JOIN pub_coordinates c ON c.id = p.coordinatesId'
+                    . ' OUTER JOIN pub_contact ct ON ct.id = p.contactId'
+                    . ' WHERE (`latitude` BETWEEN :min_lat AND :max_lat),'
+                    . ' AND (`longitude` BETWEEN :min_long AND :max_long),'
+                    . ' AND (:hour BETWEEN :open AND :close);';
             
             $qry = $this->db->prepare($sql);
             
