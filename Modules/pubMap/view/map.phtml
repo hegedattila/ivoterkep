@@ -1,4 +1,4 @@
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkUOdZ5y7hMm0yrcCQoCvLwzdM6M8s5qk&callback=initMap" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
 <script>
     var map;
 
@@ -37,7 +37,7 @@ function initMap() {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       };
-      //map.setCenter(pos);
+      map.setCenter(pos);
       map.setZoom(17);
       //console.log('User origin is: ' + map.getCenter().toString());
     });
