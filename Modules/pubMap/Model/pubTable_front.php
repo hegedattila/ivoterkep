@@ -22,36 +22,40 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
             $paramCont->addParam('max_lat', $params['max_lat'], \PDO::PARAM_INT);
             $paramCont->addParam('min_long', $params['min_long'], \PDO::PARAM_INT);
             $paramCont->addParam('max_long', $params['max_long'], \PDO::PARAM_INT);
-            $paramCont->addParam('time', $params['time'], \PDO::PARAM_INT);
+            $paramCont->addParam('day', date('w', strtotime($params['time'])), \PDO::PARAM_INT);
+            $paramCont->addParam('hour', date('H', strtotime($params['time'])), \PDO::PARAM_INT);
+            //$paramCont->addParam('min', date('i', strtotime($params['time'])), \PDO::PARAM_INT);
+
             
             switch ($params['day']){
                 case 0:
+                    $paramCont->addParam('open', '`sundayOpen`', \PDO::PARAM_STR);
+                    $paramCont->addParam('close', '`sundayClose`', \PDO::PARAM_STR);
+                    break;
+                case 1:
                     $paramCont->addParam('open', '`mondayOpen`', \PDO::PARAM_STR);
                     $paramCont->addParam('close', '`mondayClose`', \PDO::PARAM_STR);
                     break;
-                case 1:
+                case 2:
                     $paramCont->addParam('open', '`tuesdayOpen`', \PDO::PARAM_STR);
                     $paramCont->addParam('close', '`tuesdayClose`', \PDO::PARAM_STR);
                     break;
-                case 2:
+                case 3:
                     $paramCont->addParam('open', '`wednesdayOpen`', \PDO::PARAM_STR);
                     $paramCont->addParam('close', '`wednesdayClose`', \PDO::PARAM_STR);
                     break;
-                case 3:
+                case 4:
                     $paramCont->addParam('open', '`thursdayOpen`', \PDO::PARAM_STR);
                     $paramCont->addParam('close', '`thursdayClose`', \PDO::PARAM_STR);
                     break;
-                case 4:
+                case 5:
                     $paramCont->addParam('open', '`fridayOpen`', \PDO::PARAM_STR);
                     $paramCont->addParam('close', '`fridayClose`', \PDO::PARAM_STR);
                     break;
-                case 5:
+                case 6:
                     $paramCont->addParam('open', '`saturdayOpen`', \PDO::PARAM_STR);
                     $paramCont->addParam('close', '`saturdayClose`', \PDO::PARAM_STR);
-                    break;
-                case 6:
-                    $paramCont->addParam('open', '`sundayOpen`', \PDO::PARAM_STR);
-                    $paramCont->addParam('close', '`sundayClose`', \PDO::PARAM_STR);
+                    
                     break;
             }
             
@@ -62,7 +66,7 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
                     . ' OUTER JOIN pub_contact ct ON ct.id = p.contactId'
                     . ' WHERE (`latitude` BETWEEN :min_lat AND :max_lat),'
                     . ' AND (`longitude` BETWEEN :min_long AND :max_long),'
-                    . ' AND (:time BETWEEN :open AND :close)';
+                    . ' AND (:hour BETWEEN :open AND :close)';
             
             $qry = $this->db->prepare($sql);
             
