@@ -1,2 +1,31 @@
 Kocsma view<br>
-<?php var_dump($this->get('data')); ?>
+<div class="popup-content">
+    <?php $this->get('data'); ?>
+    
+    <img class="thumb-img" src="<?php $data['imagePath'] ?>">
+    
+    <div class="open-time">
+        <h3>
+            Nyitvatartás:
+        </h3>
+        Hétfő: <?php $data['open']['monday'] ?> - <?php $data['close']['monday'] ?><br>
+        Kedd: <?php $data['open']['tuesday'] ?> - <?php $data['close']['tuesday'] ?><br>
+        Szerda: <?php $data['open']['wednesday'] ?> - <?php $data['close']['wednesday'] ?><br>
+        Csütörtök: <?php $data['open']['thursday'] ?> - <?php $data['close']['thursday'] ?><br>
+        Péntek: <?php $data['open']['friday'] ?> - <?php $data['close']['friday'] ?><br>
+        Szombat: <?php $data['open']['saturday'] ?> - <?php $data['close']['saturday'] ?><br>
+        Vasárnap: <?php $data['open']['sunday'] ?> - <?php $data['close']['sunday'] ?><br>        
+    </div>
+    <div class="pub-attributes">
+        <p id="address">
+            <?php $data['address'] ?>
+        </p>
+        <p id="email">
+            <?php $data['email'] ?>
+        </p>
+        <p id="phone">
+            <?php $data['phone'] ?>
+        </p>
+    </div>
+
+</div>
