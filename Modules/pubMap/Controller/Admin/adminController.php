@@ -91,17 +91,19 @@ class adminController extends \System\AbstractClasses\abstractController{
         $invalidFormInputs = null;
         $newId = NULL;
         if($form->validateForm()){
-            $formData['lead_image'] = null;
-          //  $uploader = new \System\UploadHandler('content_leadimage', 'lead_image');
-//            if($uploader->upload()){
-//                $uploaded = $uploader->getSavedFilenames('lead_image');
-//                if(isset($uploaded['lim']) && is_string($uploaded['lim'])){
-//                    $formData['lead_image'] = $uploaded['lim'];
-//                }
-//            } else {
-//                $msg[] = ['msg' => 'Egy vagy több képet nem sikerült feltölteni:<br>'.
-//                    $uploader->getMessage('lead_image'),'color' => 'red'];
-//            }
+            if($_FILES['image']){
+                $formData['image'] = null;
+                $uploader = new \System\UploadHandler('pub_image', 'image');
+                if($uploader->upload()){
+                    $uploaded = $uploader->getSavedFilenames('image');
+                    if(isset($uploaded['img']) && is_string($uploaded['img'])){
+                        $formData['image'] = $uploaded['img'];
+                    }
+                } else {
+                    $msg[] = ['msg' => 'Egy vagy több képet nem sikerült feltölteni:<br>'.
+                        $uploader->getMessage('lead_image'),'color' => 'red'];
+                }
+            }
             $newId = $this->getTable()->save( $formData );
             if($newId) {
                 $msg[] = ['msg'=>'Sikeres művelet','color'=>'green'];
@@ -127,17 +129,22 @@ class adminController extends \System\AbstractClasses\abstractController{
         $invalidFormInputs = null;
         $dbResult = false;
         if($form->validateForm()){
-//            $formData['lead_image'] = null;
-//            $uploader = new \System\UploadHandler('content_leadimage', 'lead_image');
-//            if($uploader->upload()){
-//                $uploaded = $uploader->getSavedFilenames('lead_image');
-//                if(isset($uploaded['lim']) && is_string($uploaded['lim'])){
-//                    $formData['lead_image'] = $uploaded['lim'];
-//                }
-//            } else {
-//                $msg[] = ['msg' => 'Egy vagy több képet nem sikerült feltölteni:<br>'.
-//                    $uploader->getMessage('lead_image'),'color' => 'red'];
-//            }
+            if($_FILES['image']){
+                $formData['image'] = null;
+                $uploader = new \System\UploadHandler('pub_image', 'image');
+                if($uploader->upload()){
+                    $uploaded = $uploader->getSavedFilenames('image');
+                    if(isset($uploaded['img']) && is_string($uploaded['img'])){
+                        $formData['image'] = $uploaded['img'];
+                    } else {
+                        $msg[] = ['msg' => 'Egy vagy több képet nem sikerült feltölteni:<br>'.
+                            $uploader->getMessage('lead_image'),'color' => 'red'];
+                    }
+                } else {
+                    $msg[] = ['msg' => 'Egy vagy több képet nem sikerült feltölteni:<br>'.
+                        $uploader->getMessage('lead_image'),'color' => 'red'];
+                }
+            }
             $dbResult = $this->getTable()->save($formData, $cont_id );
             if($dbResult) {
                 $msg = ['msg'=>'Sikeres művelet','color'=>'green'];

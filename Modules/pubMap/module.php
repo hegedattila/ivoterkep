@@ -55,6 +55,9 @@ return [
             'showMap' => [
                 'action' => 'showMap'
             ],
+            'showFilter' => [
+                'action' => 'showFilter'
+            ],
             'showPub' => ['childRoutes' => [
                     '@' => [
                         'paramName' => 'pub'
@@ -93,28 +96,27 @@ return [
     'tplFormInfo' => [
         'list' => [
             'displayName'=> 'Kocsmalista',
-            'formRoute' => 'admin/tplForm/listForm', // Az admin felületen a template összerakóban megjelenő form
             'actionRoute' => 'showList',
         ],
         'pub' => [
             'displayName'=> 'Kocsma adatlap',
-        //    'formRoute' => 'admin/tplForm/form2',
             'actionRoute' => 'showPub',
         ],
         'map' => [
             'displayName'=> 'Kocsma térkép',
-        //    'formRoute' => 'admin/tplForm/form2',
             'actionRoute' => 'showMap',
         ],
         'editPub' => [
             'displayName'=> 'Kocsma szerkesztése form',
-//            'formRoute' => 'admin/tplForm/form3',
             'actionRoute' => 'pubForm/edit',
         ],
         'newPub' => [
             'displayName'=> 'Új kocsma form',
-//            'formRoute' => 'admin/tplForm/form3',
             'actionRoute' => 'pubForm',
+        ],
+        'showFilter' => [
+            'displayName'=> 'Kocsma szűrő',
+            'actionRoute' => 'showFilter',
         ],
     ],
     'listTemplates' => [ // Az admin felületen lévő mezők

@@ -14,11 +14,13 @@ class pubMap extends \System\AbstractClasses\abstractController{
     
     public function showMapAction(){
         $view = new Renderer();
-        $params = $this->getParam();
-        
-      //  var_dump($params); // sok-sok parameter
         $view->setModuleView('pubMap', 'map');
-        $view->setData('valami', "A view számára adat, lehet tömb is, vagy objektum...");
+        $view->renderView();
+        return $view->getContent();
+    }
+    public function showFilterAction(){
+        $view = new Renderer();
+        $view->setModuleView('pubMap', 'filter');
         $view->renderView();
         return $view->getContent();
     }
