@@ -1,10 +1,22 @@
-Kocsmatérkép Alapért. view
-<div id="topBar">
-    <?= $this->get('section-top') ?>
+<noscript>
+    <div style="position: fixed; display: block; width:100%; height: 100%; z-index: 100; text-align: center; font-size: 24px; color: #555555; background-color: #F7F7F7; padding: 24px;">
+        To view this site you need a JavaScript compilant browser first.
+    </div>
+</noscript>
+<div class="site-header color-light">
+  <a href="<?php echo $_SERVER['SERVER_NAME']; ?>" class="site-header-element-container" title="Ivótérkép">
+    <div class="header-text site-header-logo">
+    </div>
+    <div class="site-header-element header-text">
+      Ivótérkép
+    </div>
+  </a>
+  <?= $this->get('site-header') ?>
 </div>
-<div id="pageContent">
-    <?= $this->get('content') ?>
+<div class="site-content">
+    <?= $this->get('site-content') ?>
 </div>
-<div id="footer">
-    <?= $this->get('footer') ?>
+<div class="site-footer color-light">
+  Footertinks
+  <?= $this->get('site-footer') ?>
 </div>

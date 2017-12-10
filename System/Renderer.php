@@ -50,7 +50,7 @@ class Renderer{
     
     public function setModuleView($module, $file){
         
-        $path1 = PROJECTPATH . '/view/modules/' . $module . '/' . $file . 'phtml';
+        $path1 = PROJECTPATH . '/view/modules/' . $module . '/' . $file . '.phtml';
         $path2 = MODULEPATH . '/' . $module . '/view/' . $file . '.phtml';
         
         if(is_file($path1)){

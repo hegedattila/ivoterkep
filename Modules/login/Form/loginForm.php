@@ -11,7 +11,8 @@ class loginForm extends \System\AbstractClasses\abstractForm{
             [
                 'type' => 'text', // kotelezo
                 'attributes' => [ // html attributumok
-                    'placeholder' => \System\Translator::translateModule('login', 'login', 'username')
+                    'placeholder' => \System\Translator::translateModule('login', 'login', 'username'),
+                    'class' => 'box-element input-field input-field-text'
                 ]
             ]);
                 
@@ -19,7 +20,8 @@ class loginForm extends \System\AbstractClasses\abstractForm{
             [
                 'type' => 'password', // kotelezo
                 'attributes' => [ // html attributumok
-                    'placeholder' => \System\Translator::translateModule('login', 'login', 'password')
+                    'placeholder' => \System\Translator::translateModule('login', 'login', 'password'),
+                    'class' => 'box-element input-field input-field-text'
                 ]
             ]);
                         
@@ -36,7 +38,8 @@ class loginForm extends \System\AbstractClasses\abstractForm{
                 'type' => 'submit',
                 'name' => 'send',
                 'attributes' => [
-                    'value' => \System\Translator::translateModule('login', 'login', 'login')
+                    'value' => \System\Translator::translateModule('login', 'login', 'login'),
+                    'class' => 'submit-button'
                 ]
             ]);
     }

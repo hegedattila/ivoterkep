@@ -16,6 +16,14 @@ html, body {
   GENERIC STYLES
 */
 
+form {
+  display:inherit;
+  flex-direction: inherit;
+  position: inherit;
+  padding: 0;
+  margin: 0;
+}
+
 .site-header a {
   background-color: inherit;
 
@@ -45,28 +53,47 @@ html, body {
 }
 
 .input-field {
+  display: block;
+  position: relative;
+  
   padding-left: 10px;
   padding-right: 10px;
-  padding-top: 6px;
-  padding-bottom: 6px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .input-field-text {
-  display: inline-block;
+  /*display: inline-block;*/
 
-  position: relative;
-  width: 100%;
+  /*position: relative;*/
+  /*width: 100%;*/
 
-  background-color: inherit;
+  /* background-color: inherit; */
 
-  border-style: none;
+  /*border-style: none;*/
 
   font-size: 14px;
   color: #333333;
 }
 
+
 .input-field-text:focus {
   outline-style: none;
+}
+
+.submit-button {
+  display: inline;
+  
+  margin: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 5px;
+  padding-left: 16px;
+  padding-right: 16px;
+
+  text-align: center;
+
+  cursor: pointer;
 }
 
 .label-text {
@@ -109,7 +136,7 @@ html, body {
 }
 
 .site-header-element-container {
-  display: inline-block;
+  display: inline-flex;
 
   position: relative;
 
@@ -161,6 +188,22 @@ html, body {
   border-bottom-style: solid;
   border-bottom-color: #3090FF;
   border-bottom-width: 3px;
+}
+
+.site-header-logo {
+  display: flex;
+  
+  position: relative;
+  
+  height: calc(1em + 8px);
+  width: calc(1em + 8px);
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-right: 8px;
+  
+  background: url("/img/ivoterkep.png");
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 /*
@@ -238,21 +281,6 @@ text-align: center;
 #login-popup > .login-container {
 min-width: 100%;
 }*/
-
-.login-container {
-  display: inline-block;
-  min-width: 33vw;
-
-  z-index: inherit;
-
-  /* ??? 
-  position: relative;
-  left: 0px;
-  right: 0px;
-  margin: auto;
-  height: 100%;
-  */
-}
 
 #filter-sidebar {
   display: flex;
@@ -339,7 +367,6 @@ min-width: 100%;
   position: relative;
   z-index: 0;
   width: 100%;
-  height: 800px
 }
 
 #transparent-overlay {
@@ -359,7 +386,7 @@ min-width: 100%;
 Popup styles
 */
 
-.popup-window {
+#popup-window {
   display: flex;
   flex-direction: column;
 
@@ -381,7 +408,7 @@ Popup styles
   */
 }
 
-.popup-window .header-text {
+#popup-window .header-text {
 
   flex-shrink: 1;
 
@@ -405,7 +432,7 @@ Popup styles
   */
 }
 
-.popup-window .header-container {
+#popup-window .header-container {
   display: flex;
   flex-direction: row;
   flex-shrink: 1;
@@ -424,7 +451,23 @@ Popup styles
   border-bottom-color: #C0C0C0;
 }
 
-.login-container > .label-text {
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 33vw;
+
+  z-index: inherit;
+
+  /* ??? 
+  position: relative;
+  left: 0px;
+  right: 0px;
+  margin: auto;
+  height: 100%;
+  */
+}
+
+.popup-content > .label-text {
   font-weight: bold;
   flex-shrink: 1;
 
@@ -442,6 +485,8 @@ Popup styles
   margin-top: auto;
   margin-bottom: auto;
   border-style: none;
+
+  cursor: pointer;
 }
 
 .popup-btn-close {
