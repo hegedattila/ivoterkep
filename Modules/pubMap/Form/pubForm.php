@@ -8,16 +8,16 @@ class pubForm extends \System\AbstractClasses\abstractForm{
         $this->formAction = $action;
         $this->formAttributes['id'] = 'pubForm';
         
-        $this->addElement('active',
-            [
-                'type' => 'checkbox',
-              //  'tooltip' => tr::translateAdmin('tooltip', 'tippp'),
-                'label' => \System\Translator::translateAdmin('Labelll', 'isactive'),
-                'attributes' => [
-                    'value' => 1,
-                  //  'placeholder' => tr::translateModule('login', 'login', 'username')
-                ]
-            ]);
+//        $this->addElement('active',
+//            [
+//                'type' => 'checkbox',
+//              //  'tooltip' => tr::translateAdmin('tooltip', 'tippp'),
+//                'label' => \System\Translator::translateAdmin('Labelll', 'isactive'),
+//                'attributes' => [
+//                    'value' => 1,
+//                  //  'placeholder' => tr::translateModule('login', 'login', 'username')
+//                ]
+//            ]);
         
         $this->addElement('image',
             [
@@ -30,7 +30,7 @@ class pubForm extends \System\AbstractClasses\abstractForm{
                 ]
             ]);
                 
-        $this->addElement('no_lead_image',
+        $this->addElement('no_image',
             [
                 'type' => 'checkbox',
               //  'tooltip' => tr::translateAdmin('tooltip', 'tippp'),
@@ -114,6 +114,25 @@ class pubForm extends \System\AbstractClasses\abstractForm{
                 ]
             ]);
         
+        // nyitvatartási idők
+        
+        $days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+        
+        $this->addElement('open',
+            [
+                'type' => 'text',
+                'isArray' => $days,
+                'attributes' => []
+            ]);
+        $this->addElement('close',
+            [
+                'type' => 'text',
+                'isArray' => $days,
+                'attributes' => []
+            ]);
+        
+        // / nyitvatartás
+        
         $this->addElement('submit',
             [
                 'type' => 'submit',
@@ -150,15 +169,37 @@ class pubForm extends \System\AbstractClasses\abstractForm{
         
         
         $this->formElements['name']->validate([
-            'emptyDisabled' => ['value'=> true, 'errMsg'=>'Üres ÉRték!'],
-            'maxLength' => ['value'=> 60],
+            'emptyDisabled' => ['value'=> true, 'errMsg'=>'Üres Érték!'],
+            'maxLength' => ['value'=> 50],
+            'regex' => ['value'=> '/'. \System\StringHandler::REGEX_HUCHARS_AND_PUNCTUATIONS .'/'],
+        ]);
+        $this->formElements['address']->validate([
+            'emptyDisabled' => ['value'=> true, 'errMsg'=>'Üres Érték!'],
+            'maxLength' => ['value'=> 100],
             'regex' => ['value'=> '/'. \System\StringHandler::REGEX_HUCHARS_AND_PUNCTUATIONS .'/'],
         ]);
         
         $this->formElements['sef']->validate([
-            'emptyDisabled' => ['value'=> true, 'errMsg'=>'Üres ÉRték!'],
+            'emptyDisabled' => ['value'=> true, 'errMsg'=>'Üres Érték!'],
             'maxLength' => ['value'=> 50],
             'regex' => ['value'=> '/'. \System\StringHandler::REGEX_ENCHARS_AND_NUMBERS .'/'],
+        ]);
+        $this->formElements['latitude']->validate([
+            'emptyDisabled' => ['value'=> true, 'errMsg'=>'Üres Érték!'],
+            'regex' => ['value'=> '/'. \System\StringHandler::REGEX_NUMBER_AND_POINT .'/', 'errMsg'=>'Az érték csak szám lehet!'],
+        ]);
+        
+        $this->formElements['longitude']->validate([
+            'emptyDisabled' => ['value'=> true, 'errMsg'=>'Üres Érték!'],
+            'regex' => ['value'=> '/'. \System\StringHandler::REGEX_NUMBER_AND_POINT .'/', 'errMsg'=>'Az érték csak szám lehet!'],
+        ]);
+        
+        
+        $this->validateElement('open',[
+            'regex' => ['value'=> '/'. \System\StringHandler::REGEX_TIME .'/', 'errMsg'=>'Az érték csak idő lehet! formátum: ##:##'],
+        ]);
+        $this->validateElement('close',[
+            'regex' => ['value'=> '/'. \System\StringHandler::REGEX_TIME .'/', 'errMsg'=>'Az érték csak idő lehet! formátum: ##:##'],
         ]);
         
         return $this->isValid();

@@ -15,6 +15,7 @@ class pubMap extends \System\AbstractClasses\abstractController{
     public function showMapAction(){
         $view = new Renderer();
         $params = $this->getParam();
+        
       //  var_dump($params); // sok-sok parameter
         $view->setModuleView('pubMap', 'map');
         $view->setData('valami', "A view számára adat, lehet tömb is, vagy objektum...");
@@ -31,7 +32,7 @@ class pubMap extends \System\AbstractClasses\abstractController{
         $data = $this->getTable()->getPub($pubSef);
         
         $view->setModuleView('pubMap', 'pub');
-        $view->setData('valami', $pubSef);
+        $view->setData('data', $data);
         $view->renderView();
         if($this->checkIsAjax()){
             $window = new Renderer();
@@ -46,21 +47,22 @@ class pubMap extends \System\AbstractClasses\abstractController{
     public function pubListAction(){
         $this->setHeaderDataType('JSON');
         $params = $this->getParam('POSTParams');
-        $list = $this->getTable()->getPubList($params);
+//        $list = $this->getTable()->getPubList($params);
+//        var_dump($list);
         return json_encode([
                 [
-                'x-coord'=>1.22234,
-                'y-coord'=>3.156,
+                'lat'=>1.22234,
+                'long'=>3.156,
                 'name'=>'asd',
                 ],
                 [
-                'x-coord'=>1.2245,
-                'y-coord'=>3.156,
+                'lat'=>1.2245,
+                'long'=>3.156,
                 'name'=>'dfg',
                 ],
                 [
-                'x-coord'=>1.24234,
-                'y-coord'=>3.156,
+                'lat'=>1.24234,
+                'long'=>3.156,
                 'name'=>'sdf',
                 ],
         ]);

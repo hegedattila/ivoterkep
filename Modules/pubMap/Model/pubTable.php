@@ -31,11 +31,12 @@ class pubTable extends \System\AbstractClasses\abstractDb {
         try {
             $this->db->beginTransaction();
             
-            $sql = "INSERT INTO `pub` (id,comment,address,name)
-                    VALUES (:id,:comment,:address,:name)
+            $sql = "INSERT INTO `pub` (id,comment,address,name,sef)
+                    VALUES (:id,:comment,:address,:name,:sef)
                     ON DUPLICATE KEY UPDATE
                         comment = VALUES(comment),
                         address = VALUES(address),
+                        sef = VALUES(sef),
                         name = VALUES(name);";
             
             $qry = $this->db->prepare($sql);
@@ -45,26 +46,33 @@ class pubTable extends \System\AbstractClasses\abstractDb {
             $paramCont->addParam('comment', $data['comment'],  \PDO::PARAM_STR);
             $paramCont->addParam('address', $data['address'],  \PDO::PARAM_STR);
             $paramCont->addParam('name', $data['name'],  \PDO::PARAM_STR);
+            $paramCont->addParam('sef', $data['sef'],  \PDO::PARAM_STR);
             $paramCont->addParam('id', $id,  \PDO::PARAM_INT);
             
             $paramCont->setEmptyValuesToNull();
             $paramCont->bindAll($qry);
             
             $qry->execute();
-            if($qry->rowCount() > 0){
-                $contentID = $this->db->lastInsertId();
-                if($this->saveContact($contentID, $data) &&
-                        $this->saveCoordinates($contentID, $data)// &&
-                       // $this->saveOpen($contentID, $data)
-                        ){
-                    $this->db->commit();
-                    return $contentID;
-                }
+            
+            $pubId = false;
+            if($id){
+                $pubId = $id;
+            } elseif($qry->rowCount() > 0){
+                $pubId = $this->db->lastInsertId();
+            } else {
                 $this->db->rollBack();
                 return false;
-            } else {
-                return false;
             }
+            
+            if($this->saveContact($pubId, $data) &&
+                    $this->saveCoordinates($pubId, $data) &&
+                    $this->saveOpen($pubId, $data)
+                    ){
+                $this->db->commit();
+                return $pubId;
+            }
+            $this->db->rollBack();
+            return false;
         } catch (PDOException $e) {
           //  var_dump($e->getMessage());
             return false;
@@ -92,7 +100,7 @@ class pubTable extends \System\AbstractClasses\abstractDb {
             $qry->execute();
             return true;
         } catch (PDOException $e) {
-           // var_dump($e->getMessage());
+         //   var_dump($e->getMessage());
             return false;
         }
     }
@@ -128,12 +136,33 @@ class pubTable extends \System\AbstractClasses\abstractDb {
             $sql = "INSERT INTO `pub_open`
                 (`mondayOpen`, `mondayClose`, `tuesdayOpen`, `tuesdayClose`, `wednesdayOpen`, `wednesdayClose`, `thursdayOpen`, `thursdayClose`, `fridayOpen`, `fridayClose`, `saturdayOpen`, `saturdayClose`, `sundayOpen`, `sundayClose`, `pubId`)
                     VALUES 
-                (:mondayO, :mondayC, :tuesdayO, :tuesdayC, :wednesdayO, :wednesdayC, :thursdayO, :thursdayC, :fridayO, :fridayC, :saturdayO, :saturdayC, :sundayO, :sundayC, :pubId);";
+                (:mondayO, :mondayC, :tuesdayO, :tuesdayC, :wednesdayO, :wednesdayC, :thursdayO, :thursdayC, :fridayO, :fridayC, :saturdayO, :saturdayC, :sundayO, :sundayC, :pubId)
+                ON DUPLICATE KEY UPDATE
+                    mondayOpen = VALUES(mondayOpen),
+                    mondayClose = VALUES(mondayClose),
+                    tuesdayOpen = VALUES(tuesdayOpen),
+                    tuesdayClose = VALUES(tuesdayClose),
+                    wednesdayOpen = VALUES(wednesdayOpen),
+                    wednesdayClose = VALUES(wednesdayClose),
+                    thursdayOpen = VALUES(thursdayOpen),
+                    thursdayClose = VALUES(thursdayClose),
+                    fridayOpen = VALUES(fridayOpen),
+                    fridayClose = VALUES(fridayClose),
+                    saturdayOpen = VALUES(saturdayOpen),
+                    saturdayClose = VALUES(saturdayClose),
+                    sundayOpen = VALUES(sundayOpen),
+                    sundayClose = VALUES(sundayClose)";
             $qry = $this->db->prepare($sql);
             
             $paramCont = new \System\ParameterContainer();
-            
-//            $paramCont->addParam('mondayO', $data['mondayO'],  \PDO::PARAM_INT);
+            foreach ($data['open'] as $key => $value) {
+               // if($value) $value .= ':00';
+                $paramCont->addParam($key . 'O', $value,  \PDO::PARAM_STR);
+            }
+            foreach ($data['close'] as $key => $value) {
+              //  if($value) $value .= ':00';
+                $paramCont->addParam($key . 'C', $value,  \PDO::PARAM_STR);
+            }
             $paramCont->addParam('pubId', $pubId,  \PDO::PARAM_INT);
             
             $paramCont->setEmptyValuesToNull();
@@ -143,7 +172,7 @@ class pubTable extends \System\AbstractClasses\abstractDb {
             
             return true;
         } catch (PDOException $e) {
-            var_dump($e->getMessage());
+         //   var_dump($e->getMessage());
             return false;
         }
     }
@@ -153,7 +182,7 @@ class pubTable extends \System\AbstractClasses\abstractDb {
             $sql = "SELECT * FROM pub p
                     LEFT JOIN pub_contact pc ON pc.`pubId` = p.`id`
                     LEFT JOIN pub_coordinates pcts ON pcts.`pubId` = p.`id`
-                   -- LEFT JOIN pub_contact pc ON pc.`pubId` = p.`id`
+                 --   LEFT JOIN pub_open po ON po.`pubId` = p.`id`
                    WHERE p.id = :pid;
                     ";
             $qry = $this->db->prepare($sql);
@@ -166,7 +195,51 @@ class pubTable extends \System\AbstractClasses\abstractDb {
                 
                 $data = $qry->fetch(\PDO::FETCH_ASSOC);
                 
-                return $data;
+                return array_merge($data,  $this->getOpenDataToForm($id));
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+          //  var_dump($e->getMessage());
+            return false;
+        }
+    }
+    
+    private function getOpenDataToForm($id) {
+        try {
+            $sql = "SELECT * FROM pub_open WHERE pubId = :pid;
+                    ";
+            $qry = $this->db->prepare($sql);
+            
+            $qry->bindValue('pid', $id, \PDO::PARAM_INT);
+            
+            $qry->execute();
+            
+            if($qry->rowCount() == 1){
+                
+                $data = $qry->fetch(\PDO::FETCH_ASSOC);
+                $out = [
+                    'open' => [
+                        'monday' => $data['mondayOpen'],
+                        'tuesday' => $data['tuesdayOpen'],
+                        'wednesday' => $data['wednesdayOpen'],
+                        'thursday' => $data['thursdayOpen'],
+                        'friday' => $data['fridayOpen'],
+                        'saturday' => $data['saturdayOpen'],
+                        'sunday' => $data['sundayOpen']
+                    ],
+                    'close' => [
+                        'monday' => $data['mondayClose'],
+                        'tuesday' => $data['tuesdayClose'],
+                        'wednesday' => $data['wednesdayClose'],
+                        'thursday' => $data['thursdayClose'],
+                        'friday' => $data['fridayClose'],
+                        'saturday' => $data['saturdayClose'],
+                        'sunday' => $data['sundayClose']
+                    ],
+                ];
+                
+                return $out;
             } else {
                 return false;
             }

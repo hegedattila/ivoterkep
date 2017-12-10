@@ -1,7 +1,69 @@
 <div id="container">
     <?php $form = $this->get('form'); ?>
+    
     <?= $form->openTag(); ?>
-    <?= $form->renderAllToRows(); ?>
+    <fieldset>
+        <legend>Általános beáll.:</legend>
+        <div class="c12 colpadding">
+            <?= $form->formElement('name'); ?>
+        </div>
+        <div class="c2 colpadding clear">
+            <div class="leadIm">
+                <?= $form->formElement('image'); ?>
+            </div>
+            <?= $form->formElement('no_image'); ?>
+        </div>
+        <div id="img_preview" class="c10">
+            <img id="previewimg" src="">
+        </div>
+        <div class="c12 colpadding">
+            <?= $form->formElement('address'); ?>
+        </div>
+        <div class="c12 colpadding">
+            <?= $form->formElement('comment'); ?>
+        </div>
+        <div class="c12 colpadding">
+            <?= $form->formElement('sef'); ?>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Elérhetőségek:</legend>
+        <div class="c6 colpadding">
+            <?= $form->formElement('email'); ?>
+        </div>
+        <div class="c6 colpadding">
+            <?= $form->formElement('phone'); ?>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Koordináták:</legend>
+        <div class="c6 colpadding">
+            <?= $form->formElement('latitude'); ?>
+        </div>
+        <div class="c6 colpadding">
+            <?= $form->formElement('longitude'); ?>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Nyitvatartás:</legend>
+        <table>
+        <?php $days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+        foreach ($days as $key) { ?>
+            <tr>
+                <td>
+                    <?= $key ?>
+                </td>
+                <td>
+                    <?= $form->formElement('open',null,null,$key); ?>
+                </td>
+                <td> - </td>
+                <td>
+                    <?= $form->formElement('close',null,null,$key); ?>
+                </td>
+            </tr>
+        <?php } ?>
+        </table>
+    </fieldset>
 
     <?= $form->formElement('submit'); ?>
     <?= $form->closeTag(); ?>
