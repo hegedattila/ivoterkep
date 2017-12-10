@@ -28,7 +28,7 @@ return [
     'tplFormInfo' => [
         'login' => [
             'displayName'=> '_Bejelentkezés',
-            'actionRoute' => 'logoutBtn',
+            'actionRoute' => 'showLoginLogout',
             ],
     ],
 ];
