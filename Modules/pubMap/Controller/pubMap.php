@@ -46,7 +46,7 @@ class pubMap extends \System\AbstractClasses\abstractController{
         }
             $window = new Renderer();
             $window->setView('popupWindow');
-            $window->setDataArr(['title' => 'Kocsma', 'content' => $content]);
+            $window->setDataArr(['title' => $data['name'], 'content' => $content]);
             $window->renderView();
         return $window->getContent();
     }

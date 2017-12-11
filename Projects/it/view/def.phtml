@@ -4,7 +4,7 @@
     </div>
 </noscript>
 <div class="site-header color-light">
-  <a href="http://<?php echo $_SERVER['SERVER_NAME']; ?>" class="site-header-element-container" title="Ivótérkép">
+  <a href="https://<?php echo $_SERVER['SERVER_NAME']; ?>" class="site-header-element-container" title="Ivótérkép">
     <div class="header-text site-header-logo">
     </div>
     <div class="site-header-element header-text">
@@ -22,6 +22,25 @@
     <?= $this->get('site-content') ?>
 </div>
 <div class="site-footer color-light">
-  Footertinks
+  <a href="https://github.com/hegedattila/ivoterkep">
+    Github repo
+  </a>
+  <div>
+    Semmilyen felelősséget nem vállalunk! (c) RFT 2017
+  </div>
+  <?php
+    if(\System\UserHandler::checkIsLoggedIn()) {
+      if (\System\UserHandler::checkIsAdminUser()) {
+  ?>
+        <div style="text-decoration: underline;" onclick="makePopUp('/____/pubMap/showFrontPubForm');">
+          Kocsma felvétele
+        </div>
+        <a href="/admin">
+          Ugrás az admin felületre
+        </a>
+  <?php
+      }
+    }
+  ?>
   <?= $this->get('site-footer') ?>
 </div>

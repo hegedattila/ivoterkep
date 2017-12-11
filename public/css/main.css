@@ -394,6 +394,8 @@ form {
 
   /*max-width: 100%;*/
   overflow-x: hidden;
+
+  cursor: pointer;
 }
 
 .result-entry:last-child {
@@ -678,7 +680,6 @@ FOOTER STYLES
   width: 100%;
 
   margin: 0px;
-  padding: 0px;
 
   box-shadow: 0 0 7px rgba(0, 0, 0, .7);
 
@@ -687,6 +688,15 @@ FOOTER STYLES
   bottom: 0px;
   left: 0px;
   */
+}
+
+.site-footer>* {
+  background-color: inherit;
+  flex-grow: 1;
+  color: inherit;
+  padding: 4px;
+  text-align: center;
+  font-weight: bold;
 }
 
 /*
