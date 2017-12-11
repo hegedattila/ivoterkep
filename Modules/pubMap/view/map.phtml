@@ -7,6 +7,7 @@
     var directionsDisplay;
     var directionsService;
     var geoCoder;
+    var popup;
     var initSef = '<?= $this->get('sef') ?>';
 
     function initMap() {
@@ -34,19 +35,23 @@
                         }]
                 }]
         });
+        
+        directionsService = new google.maps.DirectionsService();
+        directionsDisplay = new google.maps.DirectionsRenderer();
+                
+// selfPos = addMarker({lat:47.5472978,lng:21.6383488}, '51baef', 'Ön itt áll'); // teszt!!
 
         map.addListener('dragend', refreshList);
         map.addListener('zoom_changed', refreshList);
 
-        geolocate();
+        geoLocate();
         window.setTimeout(refreshList, 500);
         
         if(initSef){
-            makePopUp('/____/pubMap/showPub/' + initSef);
+            popUp = makePopUp('/____/pubMap/showPub/' + initSef);
         }
         
         geoCoder = new google.maps.Geocoder();
-        
         
     }
     var markers = [];
@@ -67,13 +72,16 @@
             alert('Sajnos ez nem jött össze! Nincs engedélyezve a helymeghatározás funkció a böngésződben. :( ');
             return;
         }
-       // var end = markers[0].getPosition();
+        if(popup){
+            popup.close();
+        }
+        var target = selfPos.getPosition();
         var bounds = new google.maps.LatLngBounds();
-        bounds.extend(selfPos);
+        bounds.extend(target);
         bounds.extend(pos);
         map.fitBounds(bounds);
         var request = {
-            origin: selfPos,
+            origin: target,
             destination: pos,
             travelMode: google.maps.TravelMode.DRIVING
         };
@@ -159,7 +167,7 @@
         };
         var marker = addMarker({lat: Number(res.lat), lng: Number(res.lng)}, color, res.name);
         marker.addListener('click', function() {
-            makePopUp('/____/pubMap/showPub/'+res.id);
+            popup = makePopUp('/____/pubMap/showPub/'+res.id);
         });
         markers.push(marker);
     }
@@ -184,7 +192,7 @@
         markers = [];
     }
     
-    function geolocate(){
+    function geoLocate(){
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 pos = {
@@ -193,10 +201,11 @@
                 };
                 map.setCenter(pos);
                 map.setZoom(15);
+                if(selfPos){
+                    selfPos.setMap(null);
+                }
                 selfPos = addMarker(pos, '51baef', 'Ön itt áll');
                 
-                directionsService = new google.maps.DirectionsService();
-                directionsDisplay = new google.maps.DirectionsRenderer();
                 directionsDisplay.setMap(map);
             },function(err) {
                 console.warn(`ERROR(${err.code}): ${err.message}`);
@@ -211,13 +220,13 @@
         $('#searchbox').keypress(function (e) {
             if (e.which == 13) {
                 geoCode($(this).val());
-                refreshList();
             }
         });
         $('#locate-user').click(function () {
             if(!geoLocate()){
-                alert('Sajnos ez nem jött össze! Nincs engedélyezve a helymeghatározás funkció a böngésződben. :( ');
+                alert('Sajnos ez nem jött össze! Nincs engedélyezve a helymeghatározás funkció a böngésződben. Bocsi! ');
             }
+            refreshList();
         });
     };
     

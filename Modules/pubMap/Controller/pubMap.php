@@ -30,23 +30,25 @@ class pubMap extends \System\AbstractClasses\abstractController{
     
     // egyetlen kocsma adatait adja
     public function showPubAction(){
-        $view = new Renderer();
         $pubSef = $this->getParam(['moduleRouteParams','pub'],['routeParams',-1]);
         
         //---> adatok lekérdezése DB-ből...
         $data = $this->getTable()->getPub($pubSef);
-        
-        $view->setModuleView('pubMap', 'pub');
-        $view->setData('data', $data);
-        $view->renderView();
-        if($this->checkIsAjax()){
+        $content;
+        if($data){
+            $view = new Renderer();
+            $view->setModuleView('pubMap', 'pub');
+            $view->setData('data', $data);
+            $view->renderView();
+            $content = $view->getContent();
+        } else {
+            $content = 'Nem található adat!';
+        }
             $window = new Renderer();
             $window->setView('popupWindow');
-            $window->setDataArr(['title' => 'Kocsma', 'content' => $view->getContent()]);
+            $window->setDataArr(['title' => 'Kocsma', 'content' => $content]);
             $window->renderView();
-            return $window->getContent();
-        }
-        return $view->getContent();
+        return $window->getContent();
     }
     
     public function showFrontPubFormAction(){

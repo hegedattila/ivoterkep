@@ -78,7 +78,7 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
             if($qry->rowCount() == 1){
                 return array_merge($data,$this->getOpens($data['id']));
             } else {
-                return [];
+                return false;
             }
             //...
         } catch (PDOException $e) {
