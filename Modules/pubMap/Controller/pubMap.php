@@ -39,7 +39,7 @@ class pubMap extends \System\AbstractClasses\abstractController{
         if($this->checkIsAjax()){
             $window = new Renderer();
             $window->setView('popupWindow');
-            $window->setDataArr(['title' => $pubSef, 'content' => $view->getContent()]);
+            $window->setDataArr(['title' => 'Kocsma', 'content' => $view->getContent()]);
             $window->renderView();
             return $window->getContent();
         }

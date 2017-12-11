@@ -22,58 +22,22 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
             $paramCont->addParam('max_lat', $params['maxLat'], \PDO::PARAM_INT);
             $paramCont->addParam('min_long', $params['minLong'], \PDO::PARAM_INT);
             $paramCont->addParam('max_long', $params['maxLong'], \PDO::PARAM_INT);
-            $paramCont->addParam('time', '22:00:00', \PDO::PARAM_STR);
+            $paramCont->addParam('time', $params['time'] . ':00', \PDO::PARAM_STR);
+            $paramCont->addParam('now', date('H:i:s'), \PDO::PARAM_INT);
             //$paramCont->addParam('min', date('i', strtotime($params['time'])), \PDO::PARAM_INT);
-
-            $open; $close;
-            switch ($params['day']){
-                case 0:
-                    $open = '`sundayOpen`';
-                    $close = '`sundayClose`';
-                    break;
-                case 1:
-                    $open = '`mondayOpen`';
-                    $close = '`mondayClose`';
-                    break;
-                case 2:
-                    $open = '`tuesdayOpen`';
-                    $close = '`tuesdayClose`';
-                    break;
-                case 3:
-                    $open = '`wednesdayOpen`';
-                    $close = '`wednesdayClose`';
-                    break;
-                case 4:
-                    $open = '`thursdayOpen`';
-                    $close = '`thursdayClose`';
-                    break;
-                case 5:
-                    $open = '`fridayOpen`';
-                    $close = '`fridayClose`';
-                    break;
-                case 6:
-                    $open = '`saturdayOpen`';
-                    $close = '`saturdayClose`';
-                    
-                    break;
-            }
-//            IF $open > $close
-//                        SELECT *
-//                        FROM pub p
-//                        LEFT JOIN pub_coordinates c ON c.pubId = p.id
-//                        LEFT JOIN pub_contact ct ON ct.pubId = p.id
-//                        WHERE (`latitude` BETWEEN :min_lat AND :max_lat)
-//                        AND (`longitude` BETWEEN :min_long AND :max_long)
-//                    --    AND (:hour NOT BETWEEN $close AND $open);
-//                    ELSE
             
-            $sql = "SELECT latitude lat, longitude lng, p.name, p.id
+            $day = strtolower(date('l', strtotime($params['date'])));
+            
+            $sql = "SELECT latitude lat, longitude lng, p.name, p.id,
+                        IF(:now BETWEEN `".$day."Open` AND `".$day."Close`,
+                           IF(TIMEDIFF(`".$day."Close`, :now ) < '01:00:00','1hour','open')
+                        ,'close') as opened
                         FROM pub p
                         LEFT JOIN pub_coordinates c ON c.pubId = p.id
                         LEFT JOIN pub_open po ON po.pubId = p.id
                         WHERE (`latitude` BETWEEN :min_lat AND :max_lat)
                         AND (`longitude` BETWEEN :min_long AND :max_long)
-                        AND (:time BETWEEN $open AND $close);";
+                        AND (:time BETWEEN `".$day."Open` AND `".$day."Close`);";
             
             $qry = $this->db->prepare($sql);
             $paramCont->bindAll($qry);

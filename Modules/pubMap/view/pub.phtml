@@ -1,36 +1,35 @@
-Kocsma view<br>
 <div class="popup-content">
-    <?php $this->get('data'); ?>
+    <?php $data = $this->get('data'); ?>
     
-    <img class="thumb-img" src="<?php $data['imagePath'] ?>">
+    <img class="thumb-img" src="/<?= $data['imagePath'] ?>">
     
     <div class="open-time">
         <h2>
-            <?php $data['name']?>
+            <?= $data['name']?>
         </h2>
         <h3>
             Nyitvatartás:
         </h3>
-        Hétfő: <?php $data['open']['monday'] ?> - <?php $data['close']['monday'] ?><br>
-        Kedd: <?php $data['open']['tuesday'] ?> - <?php $data['close']['tuesday'] ?><br>
-        Szerda: <?php $data['open']['wednesday'] ?> - <?php $data['close']['wednesday'] ?><br>
-        Csütörtök: <?php $data['open']['thursday'] ?> - <?php $data['close']['thursday'] ?><br>
-        Péntek: <?php $data['open']['friday'] ?> - <?php $data['close']['friday'] ?><br>
-        Szombat: <?php $data['open']['saturday'] ?> - <?php $data['close']['saturday'] ?><br>
-        Vasárnap: <?php $data['open']['sunday'] ?> - <?php $data['close']['sunday'] ?><br>        
+        Hétfő: <?= $data['open']['monday'] ?> - <?= $data['close']['monday'] ?><br>
+        Kedd: <?= $data['open']['tuesday'] ?> - <?= $data['close']['tuesday'] ?><br>
+        Szerda: <?= $data['open']['wednesday'] ?> - <?= $data['close']['wednesday'] ?><br>
+        Csütörtök: <?= $data['open']['thursday'] ?> - <?= $data['close']['thursday'] ?><br>
+        Péntek: <?= $data['open']['friday'] ?> - <?= $data['close']['friday'] ?><br>
+        Szombat: <?= $data['open']['saturday'] ?> - <?= $data['close']['saturday'] ?><br>
+        Vasárnap: <?= $data['open']['sunday'] ?> - <?= $data['close']['sunday'] ?><br>        
     </div>
     <div class="pub-attributes">
         <p id="address">
-            <?php $data['address'] ?>
+            <?= $data['address'] ?>
         </p>
         <p id="email">
-            <?php $data['email'] ?>
+            <?= $data['email'] ?>
         </p>
         <p id="phone">
-            <?php $data['phone'] ?>
+            <?= $data['phone'] ?>
         </p>
         <p id="comment">
-            <?php $data['comment']?>
+            <?= $data['comment']?>
         </p>
     </div>
 

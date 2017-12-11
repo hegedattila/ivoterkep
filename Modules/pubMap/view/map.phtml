@@ -3,6 +3,9 @@
 </script>
 <script>
     var map;
+    var selfPos = null;
+    var directionsDisplay;
+    var directionsService;
 
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -35,47 +38,115 @@
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
-                var pos = {
+                selfPos = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
-                map.setCenter(pos);
-                map.setZoom(17);
-                //console.log('User origin is: ' + map.getCenter().toString());
+                map.setCenter(selfPos);
+                map.setZoom(15);
+                addMarker(selfPos, '51baef', 'Ön itt áll');
+                window.setTimeout(refreshList, 500);
+                
+                directionsService = new google.maps.DirectionsService();
+                directionsDisplay = new google.maps.DirectionsRenderer();
+                directionsDisplay.setMap(map);
             });
+        } else {
+            window.setTimeout(refreshList, 500);
         }
-        
-        window.setTimeout(refreshList, 500);
     }
     var markers = [];
 
+    function calcRoute(pos) {
+        if(!selfPos || !pos){
+            console.log(':(');
+            return;
+        }
+       // var end = markers[0].getPosition();
+        var bounds = new google.maps.LatLngBounds();
+        bounds.extend(selfPos);
+        bounds.extend(pos);
+        map.fitBounds(bounds);
+        var request = {
+            origin: selfPos,
+            destination: pos,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+        directionsService.route(request, function (response, status) {
+            if (status === google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(response);
+                directionsDisplay.setMap(map);
+            } else {
+                alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+            }
+        });
+    }
+    
+    function getColoredMarker(color){
+        return new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + color,
+            new google.maps.Size(21, 34),
+            new google.maps.Point(0,0),
+            new google.maps.Point(10, 34));
+    }
     function refreshList() {
         var bounds = map.getBounds();
         $.post(
                 '/____/pubMap/getList',
                 {
-                    day:0,
+                    date: $("#date").val(),
+                    time: $("#time").val(),
+                    maxPrice: $("#sliderInput").val(),
                     minLat: bounds.f.b,
                     minLong: bounds.b.b,
                     maxLat: bounds.f.f,
-                    maxLong: bounds.b.f,
+                    maxLong: bounds.b.f
                 },
                 function (data) {
-                  //  deleteMarkers();
+                    deleteMarkers();
+                    $('#result-container').empty();
                     $.each(data, function (key, val) {
-                        addMarker({lat: Number(val.lat), lng: Number(val.lng)}, val.name);
+                        addPubMarker(val);
+                        addResultToList(val);
                     });
                 }
         );
-        //console.log('New origin is: ' + map.getCenter());
     }
     
-    function addMarker(location, name, id) {
-        var marker = new google.maps.Marker({
-            position: location,
+    function addResultToList(res) {
+        var entry = $('<div>')
+                .addClass('result-entry')
+                .html(res.name)
+                .click(function(){
+                    makePopUp('/____/pubMap/showPub/'+res.id);
+                });
+        $('#result-container').append(entry);
+    }
+    
+    function addMarker(pos, color, name) {
+        return new google.maps.Marker({
+            position: pos,
             map: map,
-            title: name
+            title: name,
+            icon: getColoredMarker(color)
         });
+    }
+    
+    function addPubMarker(res) {
+        var color;
+        switch(res.opened){
+            case 'close':
+                color = 'ed9482';
+                break;
+            case 'open':
+                color = 'a0f280';
+                break;
+            case '1hour':
+                color = 'f2dc63';
+                break;
+            default:
+                color = 'FFFFFF';
+        };
+        var marker = addMarker({lat: Number(res.lat), lng: Number(res.lng)}, color, res.name);
         marker.addListener('click', function() {
             makePopUp('/____/pubMap/showPub/'+id);
         });

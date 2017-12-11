@@ -25,6 +25,10 @@ RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
 
+RewriteCond %{THE_REQUEST} /public/([^\s?]*)
+RewriteCond %{THE_REQUEST} public/([^\s?]*)
+RewriteRule ^ %1 [L,NE]
+
 #RewriteCond %{QUERY_STRING} ajax.true
 #RewriteCond %{REQUEST_METHOD} POST
 #RewriteCond %{HTTP:X-Requested-With} XMLHttpRequest
