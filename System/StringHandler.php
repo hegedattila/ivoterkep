@@ -4,7 +4,7 @@ namespace System;
 
 class StringHandler {
     
-    const REGEX_TIME = '^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$';
+    const REGEX_TIME = '^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$';
     const REGEX_EMAIL = '^[\w-\.]+@[\w.-]+\.[A-Za-z]{2,64}$';
     const REGEX_ENCHARS_AND_NUMBERS = '^[\w ]+$';
     const REGEX_HUCHARS_AND_NUMBERS = '^[\wáéíóöőúüűÁÉÍÓÖŐÚÜŰ ]+$';

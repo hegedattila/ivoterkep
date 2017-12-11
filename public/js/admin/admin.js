@@ -7,10 +7,10 @@ function loadAdmin(url,params){
         type: 'POST',
         data: params,
         beforeSend: function() {
-          //  $("#loader").show();
+            $("#loader").show();
          },
         success: function(response, status, xhr){
-          //  $("#loader").hide();
+            $("#loader").hide();
             adminLoader(response,xhr);
             listLoader(response, url, params);
         }

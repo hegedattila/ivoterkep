@@ -14,10 +14,13 @@ class pubMap extends \System\AbstractClasses\abstractController{
     
     public function showMapAction(){
         $view = new Renderer();
+        $pubSef = $this->getParam(['routeParams',-1], null);
         $view->setModuleView('pubMap', 'map');
+        $view->setData('sef', $pubSef);
         $view->renderView();
         return $view->getContent();
     }
+    
     public function showFilterAction(){
         $view = new Renderer();
         $view->setModuleView('pubMap', 'filter');
@@ -46,6 +49,14 @@ class pubMap extends \System\AbstractClasses\abstractController{
         return $view->getContent();
     }
     
+    public function showFrontPubFormAction(){
+        $form = new \Modules\pubMap\Form\pubForm('/____/pubMap/admin/save/add');
+        $view = new \System\Renderer();
+        $view->setData('form', $form);
+        $view->setModuleView('pubMap','pubFormView');
+        $view->renderView();
+        return $view->getContent();
+    }
     public function pubListAction(){
         $this->setHeaderDataType('JSON');
         $params = $this->getParam('POSTParams');

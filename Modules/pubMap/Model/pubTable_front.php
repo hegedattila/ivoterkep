@@ -13,7 +13,6 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
     // Paraméterként várja koordinátapárok min-max értékét, hogy milyen nap van (0-6),
     // illetve, hogy hány óra van.
     // A nyitvatartás szerinti feltétel jelen formában valószínűleg nem működik.
-    // (Attila)
     public function getPubList($params) {
         try {
             $paramCont = new \System\ParameterContainer();
@@ -22,28 +21,35 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
             $paramCont->addParam('max_lat', $params['maxLat'], \PDO::PARAM_INT);
             $paramCont->addParam('min_long', $params['minLong'], \PDO::PARAM_INT);
             $paramCont->addParam('max_long', $params['maxLong'], \PDO::PARAM_INT);
-            $paramCont->addParam('time', $params['time'] . ':00', \PDO::PARAM_STR);
             $paramCont->addParam('now', date('H:i:s'), \PDO::PARAM_INT);
             //$paramCont->addParam('min', date('i', strtotime($params['time'])), \PDO::PARAM_INT);
             
-            $day = strtolower(date('l', strtotime($params['date'])));
+            $today = strtolower(date('l'));
             
             $sql = "SELECT latitude lat, longitude lng, p.name, p.id,
-                        IF(:now BETWEEN `".$day."Open` AND `".$day."Close`,
-                           IF(TIMEDIFF(`".$day."Close`, :now ) < '01:00:00','1hour','open')
+                        IF(:now BETWEEN `".$today."Open` AND `".$today."Close`,
+                           IF(TIMEDIFF(`".$today."Close`, :now ) < '01:00:00','1hour','open')
                         ,'close') as opened
                         FROM pub p
                         LEFT JOIN pub_coordinates c ON c.pubId = p.id
                         LEFT JOIN pub_open po ON po.pubId = p.id
                         WHERE (`latitude` BETWEEN :min_lat AND :max_lat)
-                        AND (`longitude` BETWEEN :min_long AND :max_long)
-                        AND (:time BETWEEN `".$day."Open` AND `".$day."Close`);";
+                        AND (`longitude` BETWEEN :min_long AND :max_long)";
+            
+            if($params['timeFilterEnabled'] && $params['date'] && $params['time']){
+                $day = strtolower(date('l', strtotime($params['date'])));
+                $sql .= " AND (`".$day."Open` IS NULL OR `".$day."Close` IS NULL OR
+                            (:time BETWEEN `".$day."Open` AND `".$day."Close`)
+                        )";
+                $paramCont->addParam('time', $params['time'], \PDO::PARAM_STR);
+            }
+            
+            $sql .= " ORDER BY name";
             
             $qry = $this->db->prepare($sql);
             $paramCont->bindAll($qry);
             $qry->execute();
             return $qry->fetchALL(\PDO::FETCH_ASSOC);
-            
         } catch (PDOException $e) {
          //   var_dump($e->getMessage());
             return null;
@@ -68,7 +74,11 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
                         
             $qry->execute();
             $data = $qry->fetch(\PDO::FETCH_ASSOC);
-            return array_merge($data,$this->getOpens($data['id']));
+            if($qry->rowCount() == 1){
+                return array_merge($data,$this->getOpens($data['id']));
+            } else {
+                return [];
+            }
             //...
         } catch (PDOException $e) {
           //  var_dump($e->getMessage());
@@ -114,11 +124,11 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
                 
                 return $out;
             } else {
-                return false;
+                return [];
             }
         } catch (PDOException $e) {
           //  var_dump($e->getMessage());
-            return false;
+            return [];
         }
     }
 }

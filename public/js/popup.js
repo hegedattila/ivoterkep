@@ -34,6 +34,9 @@ function makePopUp(data, isAjaxUrl, openCallback, closeCallback, ajaxComplete) {
     };
     
     var createWindow = function (content) {
+        if(!content){
+            return false;
+        }
         var windowContent = $(content);
         console.log($(windowContent).find('#transparent-overlay'));
         back = $(windowContent);

@@ -6,6 +6,8 @@
     var selfPos = null;
     var directionsDisplay;
     var directionsService;
+    var geoCoder;
+    var initSef = '<?= $this->get('sef') ?>';
 
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -13,7 +15,7 @@
                 lat: 47.532300,
                 lng: 21.629500
             },
-            zoom: 12,
+            zoom: 13,
             disableDoubleClickZoom: true,
             disableDefaultUI: true,
             gestureHandling: "greedy",
@@ -45,21 +47,40 @@
                 map.setCenter(selfPos);
                 map.setZoom(15);
                 addMarker(selfPos, '51baef', 'Ön itt áll');
-                window.setTimeout(refreshList, 500);
                 
                 directionsService = new google.maps.DirectionsService();
                 directionsDisplay = new google.maps.DirectionsRenderer();
                 directionsDisplay.setMap(map);
+            },function(err) {
+                console.warn(`ERROR(${err.code}): ${err.message}`);
             });
+            window.setTimeout(refreshList, 500);
         } else {
             window.setTimeout(refreshList, 500);
         }
+        if(initSef){
+            makePopUp('/____/pubMap/showPub/' + initSef);
+        }
+        
+        geoCoder = new google.maps.Geocoder();
+        
+        
     }
     var markers = [];
+    
+    function geoCode(addr){
+        geoCoder.geocode({ address: addr }, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+            } else {
+            // jaj
+            }
+        });
+    }
 
     function calcRoute(pos) {
-        if(!selfPos || !pos){
-            console.log(':(');
+        if(!selfPos){
+            alert('Sajnos ez nem jött össze! Nincs engedélyezve a helymeghatározás funkció a böngésződben. :( ');
             return;
         }
        // var end = markers[0].getPosition();
@@ -77,7 +98,7 @@
                 directionsDisplay.setDirections(response);
                 directionsDisplay.setMap(map);
             } else {
-                alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+                alert('Sajnos ez nem jött össze :( ');
             }
         });
     }
@@ -89,6 +110,11 @@
             new google.maps.Point(10, 34));
     }
     function refreshList() {
+        if(map.getZoom() < 13){
+            deleteMarkers();
+            $('#result-container').html('Ebben a nagyításban nem tudjuk megjeleníteni a találatokat. Bocsi.');
+            return;
+        }
         var bounds = map.getBounds();
         $.post(
                 '/____/pubMap/getList',
@@ -99,7 +125,8 @@
                     minLat: bounds.f.b,
                     minLong: bounds.b.b,
                     maxLat: bounds.f.f,
-                    maxLong: bounds.b.f
+                    maxLong: bounds.b.f,
+                    timeFilterEnabled: !$('#enabled').is(':checked')
                 },
                 function (data) {
                     deleteMarkers();
@@ -148,7 +175,7 @@
         };
         var marker = addMarker({lat: Number(res.lat), lng: Number(res.lng)}, color, res.name);
         marker.addListener('click', function() {
-            makePopUp('/____/pubMap/showPub/'+id);
+            makePopUp('/____/pubMap/showPub/'+res.id);
         });
         markers.push(marker);
     }
@@ -172,7 +199,12 @@
         clearMarkers();
         markers = [];
     }
-
+    $('#searchbox').keypress(function (e) {
+        if (e.which == 13) {
+            geoCode($(this).val());
+            refreshList();
+        }
+    });
 </script>
 <div id="map"></div>
 <div class="box-element marker-legend-container">
@@ -188,6 +220,10 @@
         <div class="marker-sample margin-align-vertical-middle" style="background-color: #ed9482;"></div>
         <span class="label-text margin-align-vertical-middle">Zárva</span>
     </div>
+    <div>
+        <div class="marker-sample margin-align-vertical-middle" style="background-color: #FFFFFF;"></div>
+        <span class="label-text margin-align-vertical-middle">Nincs adat</span>
+    </div>
 </div>
 <div id="locate-user" class="box-element">
     <svg class="margin-align-vertical-middle margin-align-horizontal-middle">
@@ -199,4 +235,3 @@
         <circle cx="50%" cy="50%" r="15%" fill="#555555"/>
     </svg>
 </div>
-<?= $this->get('valami'); ?>

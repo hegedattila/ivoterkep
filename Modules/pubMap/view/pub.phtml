@@ -1,12 +1,32 @@
 <div class="popup-content">
     <?php $data = $this->get('data'); ?>
     
-    <img class="thumb-img" src="/<?= $data['imagePath'] ?>">
-    
+    <?php if($data['imagePath']): ?>
+        <img class="thumb-img" src="/<?= $data['imagePath'] ?>">
+    <?php endif; ?>
+    <h2>
+        <?= $data['name']?>
+    </h2>
+    <div class="isOpen">Jelenleg: 
+        <?php if(isset($data['opened'])){
+                switch ($data['opened']) {
+                    case 'open':
+                        echo 'Nyitva!';
+                        break;
+                    case 'close':
+                        echo 'Zárva';
+                        break;
+                    case '1hour':
+                        echo 'Egy órán belül zár';
+                        break;
+                    default:
+                        echo 'Nincs adat :(';
+                }} else {
+                     echo 'Nincs adat :(';
+                }
+            ?>
+    </div>
     <div class="open-time">
-        <h2>
-            <?= $data['name']?>
-        </h2>
         <h3>
             Nyitvatartás:
         </h3>
@@ -20,17 +40,30 @@
     </div>
     <div class="pub-attributes">
         <p id="address">
-            <?= $data['address'] ?>
+            Cím: <?= $data['address'] ?>
         </p>
-        <p id="email">
-            <?= $data['email'] ?>
-        </p>
-        <p id="phone">
-            <?= $data['phone'] ?>
-        </p>
-        <p id="comment">
-            <?= $data['comment']?>
-        </p>
+        <?php if($data['email']): ?>
+            <p id="email">
+                E-mail cím: <?= $data['email'] ?>
+            </p>
+        <?php endif; ?>
+        <?php if($data['phone']): ?>
+            <p id="phone">
+                Telefonszám: <?= $data['phone'] ?>
+            </p>
+        <?php endif; ?>
+        <?php if($data['comment']): ?>
+            <p id="comment">
+                <?= $data['comment']?>
+            </p>
+        <?php endif; ?>
     </div>
+      
+    <input type="button" class="submit-button" style="display: inline; margin: 10px 5px 10px 5px;" onClick="createRoute()" value="Útvonal ide!">
 
+    <script>
+        function createRoute(){
+            calcRoute({lat: Number('<?= $data['latitude']?>'), lng:Number('<?= $data['longitude']?>')});
+        }
+    </script>
 </div>

@@ -129,13 +129,13 @@ class pubForm extends \System\AbstractClasses\abstractForm{
         
         $this->addElement('open',
             [
-                'type' => 'text',
+                'type' => 'time',
                 'isArray' => $days,
                 'attributes' => []
             ]);
         $this->addElement('close',
             [
-                'type' => 'text',
+                'type' => 'time',
                 'isArray' => $days,
                 'attributes' => []
             ]);
