@@ -1,4 +1,4 @@
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBzweJ_v8LC93Np20uBUbgZiO1tELZ-cl0&callback=initMap" async defer>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6kWb9i_KR9xyaQATIPSQfbfRQJ3dym2U&callback=initMap" async defer>
 //zoli 
 </script>
 <script>
@@ -175,4 +175,28 @@
 
 </script>
 <div id="map"></div>
+<div class="box-element marker-legend-container">
+    <div>
+        <div class="marker-sample margin-align-vertical-middle" style="background-color: #a0f280;"></div>
+        <span class="label-text margin-align-vertical-middle">Nyitva</span>
+    </div>
+    <div>
+        <div class="marker-sample margin-align-vertical-middle" style="background-color: #f2dc63;"></div>
+        <span class="label-text margin-align-vertical-middle">Egy órán belül zár</span>
+    </div>
+    <div>
+        <div class="marker-sample margin-align-vertical-middle" style="background-color: #ed9482;"></div>
+        <span class="label-text margin-align-vertical-middle">Zárva</span>
+    </div>
+</div>
+<div id="locate-user" class="box-element">
+    <svg class="margin-align-vertical-middle margin-align-horizontal-middle">
+        <line x1="50%" y1="0%" x2="50%" y2="15%"/>
+        <line x1="50%" y1="100%" x2="50%" y2="85%"/>
+        <line x1="0%" y1="50%" x2="15%" y2="50%"/>
+        <line x1="100%" y1="50%" x2="85%" y2="50%"/>
+        <circle cx="50%" cy="50%" r="35%" fill="none"/>
+        <circle cx="50%" cy="50%" r="15%" fill="#555555"/>
+    </svg>
+</div>
 <?= $this->get('valami'); ?>
