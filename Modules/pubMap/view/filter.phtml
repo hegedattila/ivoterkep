@@ -1,29 +1,71 @@
 <div id="filter-sidebar" class="color-dark">
   <div id="filter-container">
     <div class="filter-entry-container">
-      <div class="filter-label-container">
+      <div class="separator-label-container">
         <span class="label-text color-dark">
           Nyitvatartás
         </span>
       </div>
-      <input type="date" name="date" class="box-element input-field input-field-text" style="margin-top: 4px">
+      <input type="date" id="date" class="box-element input-field input-field-text" style="margin-top: 4px">
       
       <div style="display: flex; flex-direction: row; margin-top: 4px">
-        <input type="time" name="time" class="box-element input-field input-field-text" style="">
+        <input type="time" id="time" class="box-element input-field input-field-text" style="">
         <input type="button" value="Most" onClick="setToCurrentTime()" class="submit-button" style="margin: 0px; margin-left: auto;">
       </div>
-      
     </div>
     <div class="filter-entry-container">
-      <div class="filter-label-container">
+      <div class="separator-label-container">
         <span class="label-text color-dark">
           Max. sör egységár(Ft/liter)
         </span>
       </div>
-      
-      <input type="range" name="ár" min="0" step="10" max="1001" value="1001">
-      <div class="filter-label" id="SliderValue"></div>
+      <input type="range" name="ár" min="0" step="10" max="1000" value="1000" id="sliderInput" oninput="onSliderUpdate()">
+      <div class="label-text" id="sliderDisplay" style="font-weight: bold;"></div>
     </div>
+  </div>
+  <div class="separator-label-container">
+    <span class="label-text color-dark">
+      Eredmény
+    </span>
+  </div>
+  <div id="result-container" class="box-element color-light">
+    <div class="result-entry">Példa</div>
   </div>
   <input type="button" id="filter-button" class="submit-button" style="display: inline; margin: 10px 5px 10px 5px;" onClick="refreshMap()" value="Szűrés">
 </div>
+
+<script>
+  $(document).ready(function() {
+    setToCurrentTime();
+    onSliderUpdate();
+  });
+    
+  function setToCurrentTime() {
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = '0' + (now.getMonth() + 1);
+    var day = '0' + now.getDate();
+    var hour = '0' + now.getHours();
+    var min = '0' + now.getMinutes();
+
+    month = month.substr(month.length - 2, 2);
+    day = day.substr(day.length - 2, 2);
+    hour = hour.substr(hour.length - 2, 2);
+    min = min.substr(min.length - 2, 2);
+
+    $("#date").val(year + '-' + month + '-' + day);
+    $("#time").val(hour + ':' + min);
+  }
+
+  function onSliderUpdate() {
+    var slider = $("#sliderInput");
+    var sliderval = slider.val();
+    if (sliderval == slider.attr("min")) {
+      sliderval = 'Ingyen';
+    }
+    else if (sliderval == slider.attr("max")) {
+      sliderval = '1000+';
+    }
+    $("#sliderDisplay").text(sliderval);
+  }
+</script>
