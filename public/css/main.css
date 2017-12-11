@@ -239,21 +239,26 @@ form {
   background-size: contain;
 }
 
-/*
-  Irrelevans
-*/
 .site-header-searchbox {
-  padding-left: 10px;
+  display: inline-block;
+
+  flex-shrink: 1;
+  flex-grow: 1;
+  position: relative;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  margin-right: 30px;
+
+  min-width: 50px;
+  width: 100%;
+  max-width: 300px;
+  
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  /*padding-left: 10px;
   padding-right: 10px;
   padding-top: 6px;
-  padding-bottom: 6px;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-right: 30px;
-  width: 300px;
-  vertical-align: middle;
-  display: inline-block;
-  position: relative;
+  padding-bottom: 6px;*/
 }
 
 .site-header-searchbox-input {
