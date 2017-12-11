@@ -1,0 +1,11 @@
+<div class="site-header-element-container site-header-element-container-login">
+    <div id="login-btn" class="site-header-element header-text" title="Bejelentkezés">Bejelentkezés
+        
+    </div>
+</div>
+
+<script>
+    $('#login-btn').click(function(){
+        makePopUp('<?= htmlspecialchars($this->get('loginFormUrl')) ?>');
+    });
+</script>

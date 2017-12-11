@@ -12,6 +12,22 @@ class loginController extends \System\AbstractClasses\abstractController{
         $view->setModuleView('login', $viewName);
         $view->setData('form', $form);
         $view->renderView();
+        if($this->checkIsAjax()){
+            $window = new Renderer();
+            $window->setView('popupWindow');
+            $window->setDataArr(['title' => 'Bejelentkezés', 'content' => $view->getContent()]);
+            $window->renderView();
+            return $window->getContent();
+        }
+        return $view->getContent();
+    }
+
+    public function showLoginAction() {
+        $view = new Renderer();
+        $view->setModuleView('login', 'login');
+        //$view->setData('loginFormUrl', $this->getParam(['moduleParams','formAction'], ['moduleConfigParams','logoutFormAction'], null));
+        $view->setData('loginFormUrl',  '/____/login/showLoginLogout');
+        $view->renderView();
         return $view->getContent();
     }
     
@@ -28,6 +44,14 @@ class loginController extends \System\AbstractClasses\abstractController{
             return $this->showLogoutAction();
         } else {
             return $this->showLoginFormAction();
+        }
+    }
+
+    public function showLoginLogoutBtnAction() {
+        if(\System\UserHandler::checkIsLoggedIn()){
+            return $this->showLogoutAction();
+        } else {
+            return $this->showLoginAction();
         }
     }
     

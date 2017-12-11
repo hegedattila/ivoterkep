@@ -1,0 +1,17 @@
+<div class="site-header-element-container site-header-element-container-login">
+    <div id="logout-btn" class="site-header-element header-text" title="Kijelentkezés">
+        Kijelentkezés        
+    </div>
+</div>
+
+<script>
+    $('#logout-btn').click(function(){
+        $.ajax({
+            url: '<?= $this->get('logoutUrl') ?>',
+            method: 'POST',
+            success: function(){
+                location.reload();
+            }
+        });
+    });
+</script>

@@ -17,6 +17,12 @@ return [
             'loginForm' => [
                 'action' => 'showLoginForm',
             ],
+            'loginlogoutBtn' => [
+                'action' => 'showLoginLogoutBtn',
+            ],
+            'loginBtn' => [
+                'action' => 'showLogin',
+            ],
             'logoutBtn' => [
                 'action' => 'showLogout',
             ],

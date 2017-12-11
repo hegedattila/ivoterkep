@@ -1,8 +1,19 @@
-<div class="popupWindow">
-    <div class="title">
-        <?= $this->get('title') ?>
-    </div>
-    <div class="content">
-        <?= $this->get('content') ?>
+<div id="transparent-overlay">
+    <div class="box-element color-light" id="popup-window">
+        <div class="header-container">
+            <div class="header-text">
+                <?= $this->get('title') ?>
+            </div>
+            <!-- needs script -->
+            <button id="popup-btn-close-container" class="box-element color-light">
+                <svg class="popup-btn-close">
+                <line x1="0" y1="0" x2="16" y2="16" />
+                <line x1="16" y1="0" x2="0" y2="16" />
+                </svg>
+            </button>
+        </div>
+        <div class="popup-content">
+            <?= $this->get('content') ?>
+        </div>
     </div>
 </div>

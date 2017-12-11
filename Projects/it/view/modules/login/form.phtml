@@ -1,33 +1,16 @@
-<!--div class="box-element color-light" id="popup-window"-->
-<div class="header-container">
-    <div class="header-text" style="">
-        Bejelentkezés
+<?php $form = $this->get('form'); ?>
+<?= $form->openTag() ?>
+    <div class="label-text">
+        Felhasználónév
     </div>
-    <!-- needs script -->
-    <button id="popup-btn-close-container" class="box-element color-light">
-        <svg class="popup-btn-close">
-        <line x1="0" y1="0" x2="16" y2="16" />
-        <line x1="16" y1="0" x2="0" y2="16" />
-        </svg>
-    </button>
-</div>
-<!-- itt van a popupnak a contentje -->
-<div class="popup-content">
-    <?php $form = $this->get('form'); ?>
-    <?= $form->openTag() ?>
-        <div class="label-text">
-            Felhasználónév
-        </div>
-        <?= $form->formElement('username') ?>
-        <div class="label-text">
-            Jelszó
-        </div>
-        <?= $form->formElement('password') ?>
-        
-        <?= $form->formElement('login') ?>
-    <?= $form->closeTag() ?>
-</div>
-<!--/div-->
+    <?= $form->formElement('username') ?>
+    <div class="label-text">
+        Jelszó
+    </div>
+    <?= $form->formElement('password') ?>
+    
+    <?= $form->formElement('login') ?>
+<?= $form->closeTag() ?>
 
 <script>
     $("#loginForm").ajaxForm({

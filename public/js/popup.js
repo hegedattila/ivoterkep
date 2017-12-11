@@ -35,8 +35,24 @@ function makePopUp(data, isAjaxUrl, openCallback, closeCallback, ajaxComplete) {
     
     var createWindow = function (content) {
         var windowContent = $(content);
+        console.log($(windowContent).find('#transparent-overlay'));
+        back = $(windowContent);
+        closeButton = $(windowContent).find('#popup-btn-close-container');
+        obj.scope = back;
+        
+        $(back).click(function (e) {
+            if (e.target === this)
+                close();
+        });
 
-        $(back).html(windowContent);
+        $(closeButton).click(function () {
+            close();
+        });
+
+        body.append(windowContent);
+        
+
+        /*$(back).html(windowContent);
 
         if ($(windowContent).hasClass('fullWidth')) {
             $(windowContent).append(closeButton);
@@ -44,12 +60,9 @@ function makePopUp(data, isAjaxUrl, openCallback, closeCallback, ajaxComplete) {
             $(back).append(closeButton);
         }
 
-        $(back).find('.close').click(function () {
-            close();
-        });
 
         $(body).append(back);
-        
+        */
         if(ajaxComplete){
             ajaxComplete(obj);
         }
@@ -58,12 +71,12 @@ function makePopUp(data, isAjaxUrl, openCallback, closeCallback, ajaxComplete) {
     var init = function(){
         
         body = $('body');
-        back = $('<div class="popupBack">').click(function (e) {
+        /*back = $('<div class="popupBack">').click(function (e) {
             if (e.target === this)
                 close();
         });
         obj.scope = back;
-        closeButton = $('<div class="button popupClose close">').html('X');
+        closeButton = $('<div class="button popupClose close">').html('X');*/
         show();
     };
 
