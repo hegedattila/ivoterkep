@@ -1,28 +1,39 @@
+<?php
+    $isOpenTimeValid = function($data, $day)
+    {
+        if (isset($data['open'][$day]) && isset($data['close'][$day])) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+?>
+
 <div class="popup-content">
     <?php $data = $this->get('data'); ?>
     
     <?php if($data['imagePath']): ?>
-        <img class="thumb-img" src="/<?= $data['imagePath'] ?>">
+        <img class="thumb-img" src="/<?php $data['imagePath'] ?>">
     <?php endif; ?>
     <h2>
-        <?= $data['name']?>
+        <?php $data['name']?>
     </h2>
-    <div class="isOpen">Jelenleg: 
+    <div class="isOpen">
         <?php if(isset($data['opened'])){
                 switch ($data['opened']) {
                     case 'open':
-                        echo 'Nyitva!';
+                        echo 'Jelenleg nyitva!';
                         break;
                     case 'close':
-                        echo 'Zárva';
+                        echo 'Jelenleg zárva';
                         break;
                     case '1hour':
-                        echo 'Egy órán belül zár';
+                        echo 'Egy órán belül zárva.';
                         break;
                     default:
-                        echo 'Nincs adat :(';
+                        echo 'Nincs nyitvatartási adat.';
                 }} else {
-                     echo 'Nincs adat :(';
+                     echo 'Nincs nyitvatartási adat.';
                 }
             ?>
     </div>
@@ -30,31 +41,74 @@
         <h3>
             Nyitvatartás:
         </h3>
-        Hétfő: <?= $data['open']['monday'] ?> - <?= $data['close']['monday'] ?><br>
-        Kedd: <?= $data['open']['tuesday'] ?> - <?= $data['close']['tuesday'] ?><br>
-        Szerda: <?= $data['open']['wednesday'] ?> - <?= $data['close']['wednesday'] ?><br>
-        Csütörtök: <?= $data['open']['thursday'] ?> - <?= $data['close']['thursday'] ?><br>
-        Péntek: <?= $data['open']['friday'] ?> - <?= $data['close']['friday'] ?><br>
-        Szombat: <?= $data['open']['saturday'] ?> - <?= $data['close']['saturday'] ?><br>
-        Vasárnap: <?= $data['open']['sunday'] ?> - <?= $data['close']['sunday'] ?><br>        
+        <div>
+            <div class="" style="display: inline-block; float: left;">
+                <div>Hétfő</div>
+                <div>Kedd</div>
+                <div>Szerda</div>
+                <div>Csütörtök</div>
+                <div>Péntek</div>
+                <div>Szombat</div>
+                <div>Vasárnap</div>
+            </div>
+            <div style="display: inline-block; float: left; text-align: center;">
+                <?php if ($isOpenTimeValid($data, 'monday')) {?>
+                <div><?php $data['open']['monday'] ?> - <?php $data['close']['monday'] ?></div>
+                <?php } else { ?>
+                <div>Nincs adat</div>
+                <?php } ?>
+                <?php if ($isOpenTimeValid($data, 'tuesday')) {?>
+                <div><?php $data['open']['tuesday'] ?> - <?php $data['close']['tuesday'] ?></div>
+                <?php } else { ?>
+                <div>Nincs adat</div>
+                <?php } ?>
+                <?php if ($isOpenTimeValid($data, 'wednesday')) {?>
+                <div><?php $data['open']['wednesday'] ?> - <?php $data['close']['wednesday'] ?></div>
+                <?php } else { ?>
+                <div>Nincs adat</div>
+                <?php } ?>
+                <?php if ($isOpenTimeValid($data, 'thursday')) {?>
+                <div><?php $data['open']['thursday'] ?> - <?php $data['close']['thursday'] ?></div>
+                <?php } else { ?>
+                <div>Nincs adat</div>
+                <?php } ?>
+                <?php if ($isOpenTimeValid($data, 'friday')) {?>
+                <div><?php $data['open']['friday'] ?> - <?php $data['close']['friday'] ?></div>
+                <?php } else { ?>
+                <div>Nincs adat</div>
+                <?php } ?>
+                <?php if ($isOpenTimeValid($data, 'saturday')) {?>
+                <div><?php $data['open']['saturday'] ?> - <?php $data['close']['saturday'] ?></div>
+                <?php } else { ?>
+                <div>Nincs adat</div>
+                <?php } ?>
+                <?php if ($isOpenTimeValid($data, 'sunday')) {?>
+                <div><?php $data['open']['sunday'] ?> - <?php $data['close']['sunday'] ?></div>
+                <?php } else { ?>
+                <div>Nincs adat</div>
+                <?php } ?>
+            </div>
+        </div> 
     </div>
     <div class="pub-attributes">
+        <?php if (isset($$data['address'])) { ?>
         <p id="address">
-            Cím: <?= $data['address'] ?>
+            Cím: <?php $data['address'] ?>
         </p>
+        <?php } ?>
         <?php if($data['email']): ?>
             <p id="email">
-                E-mail cím: <?= $data['email'] ?>
+                E-mail cím: <?php $data['email'] ?>
             </p>
         <?php endif; ?>
         <?php if($data['phone']): ?>
             <p id="phone">
-                Telefonszám: <?= $data['phone'] ?>
+                Telefonszám: <?php $data['phone'] ?>
             </p>
         <?php endif; ?>
         <?php if($data['comment']): ?>
             <p id="comment">
-                <?= $data['comment']?>
+                <?php $data['comment']?>
             </p>
         <?php endif; ?>
     </div>
@@ -63,7 +117,7 @@
 
     <script>
         function createRoute(){
-            calcRoute({lat: Number('<?= $data['latitude']?>'), lng:Number('<?= $data['longitude']?>')});
+            calcRoute({lat: Number('<?php $data['latitude']?>'), lng:Number('<?php $data['longitude']?>')});
         }
     </script>
 </div>

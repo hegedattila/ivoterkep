@@ -252,7 +252,7 @@ form {
   min-width: 50px;
   width: 100%;
   max-width: 300px;
-  
+
   overflow-x: hidden;
   text-overflow: ellipsis;
   /*padding-left: 10px;
@@ -359,8 +359,8 @@ form {
 .result-entry {
   display: flex;
   flex-direction: column;
-  /*flex-shrink: 1;
-  flex-grow: 0;*/
+  flex-shrink: 0;
+  /*flex-grow: 0;*/
 
   border-bottom-style: solid;
   border-bottom-width: 1px;
