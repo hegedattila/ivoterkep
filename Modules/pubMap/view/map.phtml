@@ -1,5 +1,5 @@
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6kWb9i_KR9xyaQATIPSQfbfRQJ3dym2U&callback=initMap" async defer>
-//zoli 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBzweJ_v8LC93Np20uBUbgZiO1tELZ-cl0&callback=initMap" async defer>
+//zoli AIzaSyBzweJ_v8LC93Np20uBUbgZiO1tELZ-cl0
 </script>
 <script>
     var map;
@@ -38,26 +38,9 @@
         map.addListener('dragend', refreshList);
         map.addListener('zoom_changed', refreshList);
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                selfPos = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                map.setCenter(selfPos);
-                map.setZoom(15);
-                addMarker(selfPos, '51baef', 'Ön itt áll');
-                
-                directionsService = new google.maps.DirectionsService();
-                directionsDisplay = new google.maps.DirectionsRenderer();
-                directionsDisplay.setMap(map);
-            },function(err) {
-                console.warn(`ERROR(${err.code}): ${err.message}`);
-            });
-            window.setTimeout(refreshList, 500);
-        } else {
-            window.setTimeout(refreshList, 500);
-        }
+        geolocate();
+        window.setTimeout(refreshList, 500);
+        
         if(initSef){
             makePopUp('/____/pubMap/showPub/' + initSef);
         }
@@ -72,6 +55,7 @@
         geoCoder.geocode({ address: addr }, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 map.setCenter(results[0].geometry.location);
+                map.setZoom(15);
             } else {
             // jaj
             }
@@ -199,10 +183,40 @@
         clearMarkers();
         markers = [];
     }
+    
+    function geolocate(){
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                map.setCenter(pos);
+                map.setZoom(15);
+                selfPos = addMarker(pos, '51baef', 'Ön itt áll');
+                
+                directionsService = new google.maps.DirectionsService();
+                directionsDisplay = new google.maps.DirectionsRenderer();
+                directionsDisplay.setMap(map);
+            },function(err) {
+                console.warn(`ERROR(${err.code}): ${err.message}`);
+            });
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    
     $('#searchbox').keypress(function (e) {
         if (e.which == 13) {
             geoCode($(this).val());
             refreshList();
+        }
+    });
+    $('#locate-user').click(function () {
+        if(!geoLocate()){
+            alert('Sajnos ez nem jött össze! Nincs engedélyezve a helymeghatározás funkció a böngésződben. :( ');
         }
     });
 </script>

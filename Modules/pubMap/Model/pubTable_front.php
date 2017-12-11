@@ -27,9 +27,10 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
             $today = strtolower(date('l'));
             
             $sql = "SELECT latitude lat, longitude lng, p.name, p.id,
+                IF(`".$today."Open` IS NULL OR `".$today."Close` IS NULL, NULL,
                         IF(:now BETWEEN `".$today."Open` AND `".$today."Close`,
                            IF(TIMEDIFF(`".$today."Close`, :now ) < '01:00:00','1hour','open')
-                        ,'close') as opened
+                        ,'close')) as opened
                         FROM pub p
                         LEFT JOIN pub_coordinates c ON c.pubId = p.id
                         LEFT JOIN pub_open po ON po.pubId = p.id

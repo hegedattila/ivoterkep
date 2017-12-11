@@ -52,6 +52,9 @@ return [
                     ],
                 ]
             ],
+            'showFrontPubForm' => [
+                'action' => 'showFrontPubForm'
+            ],
             'showMap' => [
                 'action' => 'showMap'
             ],

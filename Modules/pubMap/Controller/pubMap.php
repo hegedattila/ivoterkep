@@ -55,8 +55,13 @@ class pubMap extends \System\AbstractClasses\abstractController{
         $view->setData('form', $form);
         $view->setModuleView('pubMap','pubFormView');
         $view->renderView();
-        return $view->getContent();
+            $window = new Renderer();
+            $window->setView('popupWindow');
+            $window->setDataArr(['title' => 'Új kocsma létrehozása', 'content' => $view->getContent()]);
+            $window->renderView();
+        return $window->getContent();
     }
+    
     public function pubListAction(){
         $this->setHeaderDataType('JSON');
         $params = $this->getParam('POSTParams');
