@@ -1,5 +1,7 @@
 <?php $form = $this->get('form'); ?>
 <?= $form->openTag() ?>
+    <div id="error-msg" class="color-error">
+    </div>
     <div class="label-text">
         Felhasználónév
     </div>
@@ -12,13 +14,29 @@
     <?= $form->formElement('login') ?>
 <?= $form->closeTag() ?>
 
+
 <script>
     $("#loginForm").ajaxForm({
       //  url: '/____/login/login',
         type: 'post',
-        success: function(){
-            location.reload();
+        success: function(response) {
+            console.log(response);
+            if(response == 'OK') {
+                location.reload();
+            } else {
+                $('#error-msg').text("Hibás felhasználónév vagy jelszó.")
+                $('#username').addClass('color-error-animated');
+                $('#password').addClass('color-error-animated');
+            }
         }
+    });
+    
+    $(document).ready(function() {
+        $('#login').click(function () {
+            $('#error-msg').text(null);
+            $('#username').removeClass('color-error-animated');
+            $('#password').removeClass('color-error-animated');
+        });
     });
 //    $('#loginForm').submit(function(e){ console.log('asd');
 //        e.preventDefault();

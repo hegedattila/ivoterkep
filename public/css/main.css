@@ -37,6 +37,28 @@ form {
   color: #555555 !important;
 }
 
+.color-error {
+  color: #ff5555 !important;
+  border-color: #ff5555 !important;
+}
+
+.color-error-animated {
+  animation-name: color-error-fadeout;
+  animation-duration: 2s;
+  animation-direction: reverse;
+}
+
+@keyframes color-error-fadeout {
+  100% { 
+    color: #ff5555;
+    border-color: #ff5555;
+  }
+  50% { 
+    color: #ff5555;
+    border-color: #ff5555;
+  }
+}
+
 .color-dark {
   background-color: #3d3d3d !important;
 
