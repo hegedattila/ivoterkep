@@ -207,18 +207,20 @@
         }
     }
     
+    window.onload = function() {
+        $('#searchbox').keypress(function (e) {
+            if (e.which == 13) {
+                geoCode($(this).val());
+                refreshList();
+            }
+        });
+        $('#locate-user').click(function () {
+            if(!geoLocate()){
+                alert('Sajnos ez nem jött össze! Nincs engedélyezve a helymeghatározás funkció a böngésződben. :( ');
+            }
+        });
+    };
     
-    $('#searchbox').keypress(function (e) {
-        if (e.which == 13) {
-            geoCode($(this).val());
-            refreshList();
-        }
-    });
-    $('#locate-user').click(function () {
-        if(!geoLocate()){
-            alert('Sajnos ez nem jött össze! Nincs engedélyezve a helymeghatározás funkció a böngésződben. :( ');
-        }
-    });
 </script>
 <div id="map"></div>
 <div class="box-element marker-legend-container">
