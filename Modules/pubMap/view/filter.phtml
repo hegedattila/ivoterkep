@@ -9,8 +9,8 @@
 
       <div style="display: flex; flex-direction: row; margin-top: 4px">
 
-      <input type="checkbox" id="enabled" class="" style="height: 20px; width: 20px; margin-left: 2px; margin-top: auto; margin-bottom: auto;">
-      <div style="font-size: auto; padding-left: 8px;margin-top: auto; margin-bottom: auto;">Bármikor</div>
+      <input type="checkbox" checked id="enabled" class="" style="height: 20px; width: 20px; margin-left: 2px; margin-top: auto; margin-bottom: auto;">
+      <div style="font-size: auto; padding-left: 8px;margin-top: auto; margin-bottom: auto;">Mindegy</div>
       </div>
       <input type="date" id="date" class="box-element input-field input-field-text" style="margin-top: 4px">
       
@@ -22,7 +22,7 @@
     <div class="filter-entry-container" id="beerPrice">
       <div class="separator-label-container">
         <span class="label-text color-dark">
-          Max. sör egységár(Ft/liter)
+          Legolcsóbb sör maximum:
         </span>
       </div>
       <input type="range" name="ár" min="0" step="10" max="1000" value="1000" id="sliderInput" oninput="onSliderUpdate()">

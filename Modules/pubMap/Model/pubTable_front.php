@@ -21,23 +21,25 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
             $paramCont->addParam('max_lat', $params['maxLat'], \PDO::PARAM_INT);
             $paramCont->addParam('min_long', $params['minLong'], \PDO::PARAM_INT);
             $paramCont->addParam('max_long', $params['maxLong'], \PDO::PARAM_INT);
+            $paramCont->addParam('maxBeer', $params['maxPrice'], \PDO::PARAM_INT);
             $paramCont->addParam('now', date('H:i:s'), \PDO::PARAM_INT);
             //$paramCont->addParam('min', date('i', strtotime($params['time'])), \PDO::PARAM_INT);
             
             $today = strtolower(date('l'));
             
             $sql = "SELECT latitude lat, longitude lng, p.name, p.id,
-                IF(`".$today."Open` IS NULL OR `".$today."Close` IS NULL, NULL,
-                        IF(:now BETWEEN `".$today."Open` AND `".$today."Close`,
-                           IF(TIMEDIFF(`".$today."Close`, :now ) < '01:00:00','1hour','open')
+                IF((`".$today."Open` IS NULL OR `".$today."Close` IS NULL), NULL,
+                        IF((:now BETWEEN `".$today."Open` AND `".$today."Close`),
+                           IF((TIMEDIFF(`".$today."Close`, :now ) < '01:00:00'),'1hour','open')
                         ,'close')) as opened
                         FROM pub p
                         LEFT JOIN pub_coordinates c ON c.pubId = p.id
                         LEFT JOIN pub_open po ON po.pubId = p.id
                         WHERE (`latitude` BETWEEN :min_lat AND :max_lat)
-                        AND (`longitude` BETWEEN :min_long AND :max_long)";
+                        AND (`longitude` BETWEEN :min_long AND :max_long)
+                        AND (`cheapestBeer` < :maxBeer OR `cheapestBeer` IS NULL)";
             
-            if($params['timeFilterEnabled'] && $params['date'] && $params['time']){
+            if($params['timeFilterEnabled'] == 'true' && $params['date'] && $params['time']){
                 $day = strtolower(date('l', strtotime($params['date'])));
                 $sql .= " AND (`".$day."Open` IS NULL OR `".$day."Close` IS NULL OR
                             (:time BETWEEN `".$day."Open` AND `".$day."Close`)
@@ -45,6 +47,28 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
                 $paramCont->addParam('time', $params['time'], \PDO::PARAM_STR);
             }
             
+            
+//            UPDATE pub_open SET
+//mondayOpen=ELT(1+FLOOR(RAND()*11),NULL,'03:00:00','04:00:00','05:00:00','06:00:00','06:30:00','07:00:00', '07:30:00', '08:30:00', '09:30:00', '10:00:00'),
+//tuesdayOpen=ELT(1+FLOOR(RAND()*11),NULL,'03:00:00','04:00:00','05:00:00','06:00:00','06:30:00','07:00:00', '07:30:00', '08:30:00', '09:30:00', '10:00:00'),
+//wednesdayOpen=ELT(1+FLOOR(RAND()*11),NULL,'03:00:00','04:00:00','05:00:00','06:00:00','06:30:00','07:00:00', '07:30:00', '08:30:00', '09:30:00', '10:00:00'),
+//thursdayOpen=ELT(1+FLOOR(RAND()*11),NULL,'03:00:00','04:00:00','05:00:00','06:00:00','06:30:00','07:00:00', '07:30:00', '08:30:00', '09:30:00', '10:00:00'),
+//fridayOpen=ELT(1+FLOOR(RAND()*11),NULL,'03:00:00','04:00:00','05:00:00','06:00:00','06:30:00','07:00:00', '07:30:00', '08:30:00', '09:30:00', '10:00:00'),
+//saturdayOpen=ELT(1+FLOOR(RAND()*11),NULL,'03:00:00','04:00:00','05:00:00','06:00:00','06:30:00','07:00:00', '07:30:00', '08:30:00', '09:30:00', '10:00:00'),
+//sundayOpen=ELT(1+FLOOR(RAND()*11),NULL,'03:00:00','04:00:00','05:00:00','06:00:00','06:30:00','07:00:00', '07:30:00', '08:30:00', '09:30:00', '10:00:00');
+            
+            
+//             
+//            UPDATE pub_open SET
+//mondayClose=ELT(1+FLOOR(RAND()*16),'11:30:00','12:00:00','12:20:00','12:40:00','13:00:00','13:20:00','13:40:00', '14:00:00', '14:20:00', '14:40:00', '15:00:00', '15:30:00', '16:00:00', '16:30:00', '17:00:00', '17:30:00'),
+//tuesdayClose=ELT(1+FLOOR(RAND()*16),'11:30:00','12:00:00','12:20:00','12:40:00','13:00:00','13:20:00','13:40:00', '14:00:00', '14:20:00', '14:40:00', '15:00:00', '15:30:00', '16:00:00', '16:30:00', '17:00:00', '17:30:00'),
+//mondayClose=ELT(1+FLOOR(RAND()*16),'11:30:00','12:00:00','12:20:00','12:40:00','13:00:00','13:20:00','13:40:00', '14:00:00', '14:20:00', '14:40:00', '15:00:00', '15:30:00', '16:00:00', '16:30:00', '17:00:00', '17:30:00'),
+//wednesdayClose=ELT(1+FLOOR(RAND()*16),'11:30:00','12:00:00','12:20:00','12:40:00','13:00:00','13:20:00','13:40:00', '14:00:00', '14:20:00', '14:40:00', '15:00:00', '15:30:00', '16:00:00', '16:30:00', '17:00:00', '17:30:00'),
+//thursdayClose=ELT(1+FLOOR(RAND()*16),'11:30:00','12:00:00','12:20:00','12:40:00','13:00:00','13:20:00','13:40:00', '14:00:00', '14:20:00', '14:40:00', '15:00:00', '15:30:00', '16:00:00', '16:30:00', '17:00:00', '17:30:00'),
+//fridayClose=ELT(1+FLOOR(RAND()*16),'11:30:00','12:00:00','12:20:00','12:40:00','13:00:00','13:20:00','13:40:00', '14:00:00', '14:20:00', '14:40:00', '15:00:00', '15:30:00', '16:00:00', '16:30:00', '17:00:00', '17:30:00'),
+//saturdayClose=ELT(1+FLOOR(RAND()*16),'11:30:00','12:00:00','12:20:00','12:40:00','13:00:00','13:20:00','13:40:00', '14:00:00', '14:20:00', '14:40:00', '15:00:00', '15:30:00', '16:00:00', '16:30:00', '17:00:00', '17:30:00'),
+//sundayClose=ELT(1+FLOOR(RAND()*16),'11:30:00','12:00:00','12:20:00','12:40:00','13:00:00','13:20:00','13:40:00', '14:00:00', '14:20:00', '14:40:00', '15:00:00', '15:30:00', '16:00:00', '16:30:00', '17:00:00', '17:30:00')
+//            
             $sql .= " ORDER BY name";
             
             $qry = $this->db->prepare($sql);
@@ -90,7 +114,10 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
     private function getOpens($id) {
         try {
             $day = strtolower(date('l'));
-            $sql = "SELECT *, (:now BETWEEN ".$day."Open AND ".$day."Close) as opened
+            $sql = "SELECT *, IF((`".$day."Open` IS NULL OR `".$day."Close` IS NULL), NULL,
+                        IF((:now BETWEEN `".$day."Open` AND `".$day."Close`),
+                           IF((TIMEDIFF(`".$day."Close`, :now ) < '01:00:00'),'1hour','open')
+                        ,'close')) as opened
                 FROM pub_open WHERE pubId = :pid;";
             $qry = $this->db->prepare($sql);
             
@@ -103,6 +130,7 @@ class pubTable_front extends \System\AbstractClasses\abstractDb {
                 
                 $data = $qry->fetch(\PDO::FETCH_ASSOC);
                 $out = [
+                    'opened' => $data['opened'],
                     'open' => [
                         'monday' => $data['mondayOpen'],
                         'tuesday' => $data['tuesdayOpen'],

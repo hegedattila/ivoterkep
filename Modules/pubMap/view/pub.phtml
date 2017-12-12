@@ -9,31 +9,39 @@
     };
 ?>
 
-<div class="popup-content">
-    <?php $data = $this->get('data'); ?>
+<!--<div class="popup-content">-->
+    <?php $data = $this->get('data');?>
     
     <?php if($data['imagePath']): ?>
-        <img class="thumb-img" src="/<?php $data['imagePath'] ?>">
+        <div class="thumb-img" style="background-image: url('/<?= $data['imagePath'] ?>')"><br><br><br><br></div><!-- nem látta senki !>
     <?php endif; ?>
-    <h2>
-        <?php $data['name']?>
-    </h2>
+<!--    <h2>
+        <?= $data['name']?>
+    </h2>-->
+        Közvetlen link:&nbsp;<a href='https://<?php echo $_SERVER['SERVER_NAME']; ?>/<?= $data['sef'] ?>'>
+            https://<?php echo $_SERVER['SERVER_NAME']; ?>/<?= $data['sef'] ?>
+        </a>
+        <?php if ($data['address']) { ?>
+            <p id="address">
+                Cím: <?= $data['address'] ?>
+            </p>
+        <?php } ?>
     <div class="isOpen">
         <?php if(isset($data['opened'])){
                 switch ($data['opened']) {
                     case 'open':
-                        echo 'Jelenleg nyitva!';
+                        echo '<div class="green">Jelenleg nyitva!</div>';
                         break;
                     case 'close':
-                        echo 'Jelenleg zárva';
+                        echo '<div class="red">Jelenleg zárva</div>';
                         break;
                     case '1hour':
-                        echo 'Egy órán belül zárva.';
+                        echo '<div class="yellow">Egy órán belül zár.</div>';
                         break;
                     default:
-                        echo 'Nincs nyitvatartási adat.';
+                        echo 'Nincs nyitvatartási adat a mai napra.';
                 }} else {
-                     echo 'Nincs nyitvatartási adat.';
+                     echo 'Nincs nyitvatartási adat a mai napra.';
                 }
             ?>
     </div>
@@ -42,48 +50,48 @@
             Nyitvatartás:
         </h3>
         <div>
-            <div class="" style="display: inline-block; float: left;">
-                <div>Hétfő</div>
-                <div>Kedd</div>
-                <div>Szerda</div>
-                <div>Csütörtök</div>
-                <div>Péntek</div>
-                <div>Szombat</div>
-                <div>Vasárnap</div>
+            <div class="" style="display: inline-block; float: left; margin-right:10px;">
+                <div>Hétfő:</div>
+                <div>Kedd:</div>
+                <div>Szerda:</div>
+                <div>Csütörtök:</div>
+                <div>Péntek:</div>
+                <div>Szombat:</div>
+                <div>Vasárnap:</div>
             </div>
             <div style="display: inline-block; float: left; text-align: center;">
                 <?php if ($isOpenTimeValid($data, 'monday')) {?>
-                <div><?php $data['open']['monday'] ?> - <?php $data['close']['monday'] ?></div>
+                <div><?= $data['open']['monday'] ?> - <?= $data['close']['monday'] ?></div>
                 <?php } else { ?>
                 <div>Nincs adat</div>
                 <?php } ?>
                 <?php if ($isOpenTimeValid($data, 'tuesday')) {?>
-                <div><?php $data['open']['tuesday'] ?> - <?php $data['close']['tuesday'] ?></div>
+                <div><?= $data['open']['tuesday'] ?> - <?= $data['close']['tuesday'] ?></div>
                 <?php } else { ?>
                 <div>Nincs adat</div>
                 <?php } ?>
                 <?php if ($isOpenTimeValid($data, 'wednesday')) {?>
-                <div><?php $data['open']['wednesday'] ?> - <?php $data['close']['wednesday'] ?></div>
+                <div><?= $data['open']['wednesday'] ?> - <?= $data['close']['wednesday'] ?></div>
                 <?php } else { ?>
                 <div>Nincs adat</div>
                 <?php } ?>
                 <?php if ($isOpenTimeValid($data, 'thursday')) {?>
-                <div><?php $data['open']['thursday'] ?> - <?php $data['close']['thursday'] ?></div>
+                <div><?= $data['open']['thursday'] ?> - <?= $data['close']['thursday'] ?></div>
                 <?php } else { ?>
                 <div>Nincs adat</div>
                 <?php } ?>
                 <?php if ($isOpenTimeValid($data, 'friday')) {?>
-                <div><?php $data['open']['friday'] ?> - <?php $data['close']['friday'] ?></div>
+                <div><?= $data['open']['friday'] ?> - <?= $data['close']['friday'] ?></div>
                 <?php } else { ?>
                 <div>Nincs adat</div>
                 <?php } ?>
                 <?php if ($isOpenTimeValid($data, 'saturday')) {?>
-                <div><?php $data['open']['saturday'] ?> - <?php $data['close']['saturday'] ?></div>
+                <div><?= $data['open']['saturday'] ?> - <?= $data['close']['saturday'] ?></div>
                 <?php } else { ?>
                 <div>Nincs adat</div>
                 <?php } ?>
                 <?php if ($isOpenTimeValid($data, 'sunday')) {?>
-                <div><?php $data['open']['sunday'] ?> - <?php $data['close']['sunday'] ?></div>
+                <div><?= $data['open']['sunday'] ?> - <?= $data['close']['sunday'] ?></div>
                 <?php } else { ?>
                 <div>Nincs adat</div>
                 <?php } ?>
@@ -91,33 +99,27 @@
         </div> 
     </div>
     <div class="pub-attributes">
-        <?php if (isset($$data['address'])) { ?>
-        <p id="address">
-            Cím: <?php $data['address'] ?>
-        </p>
-        <?php } ?>
+        <?php if($data['cheapestBeer']): ?>
+            <p>
+                Legolcsóbb sör ára: <?= $data['cheapestBeer'] ?> Ft
+            </p>
+        <?php endif; ?>
         <?php if($data['email']): ?>
             <p id="email">
-                E-mail cím: <?php $data['email'] ?>
+                E-mail cím: <?= $data['email'] ?>
             </p>
         <?php endif; ?>
         <?php if($data['phone']): ?>
             <p id="phone">
-                Telefonszám: <?php $data['phone'] ?>
+                Telefonszám: <?= $data['phone'] ?>
             </p>
         <?php endif; ?>
         <?php if($data['comment']): ?>
             <p id="comment">
-                <?php $data['comment']?>
+                <?= $data['comment']?>
             </p>
         <?php endif; ?>
     </div>
       
-    <input type="button" class="submit-button" style="display: inline; margin: 10px 5px 10px 5px;" onClick="createRoute()" value="Útvonal ide!">
-
-    <script>
-        function createRoute(){
-            calcRoute({lat: Number('<?php $data['latitude']?>'), lng:Number('<?php $data['longitude']?>')});
-        }
-    </script>
-</div>
+    <input type="button" class="submit-button" style="display: inline; margin: 10px 5px 10px 5px;" onClick="calcRoute({lat: Number('<?= $data['latitude']?>'), lng:Number('<?= $data['longitude']?>')})" value="Útvonal ide!">
+<!--</div>-->

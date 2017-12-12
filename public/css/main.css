@@ -549,7 +549,7 @@ Popup styles
   z-index: 10;
 
   max-height: 80%;
-  max-width: 70%;
+  max-width: 500px;
   padding: 16px;
   margin: auto;
   margin-top: 10vh;
@@ -606,11 +606,14 @@ Popup styles
   border-bottom-color: #C0C0C0;
 }
 
+.popup-content.login {
+    display: flex;
+    flex-direction: column;
+}
 .popup-content {
-  display: flex;
-  flex-direction: column;
-  min-width: 33vw;
-
+  min-width: 34vw;
+display: flex;
+    flex-direction: column;
   z-index: inherit;
 
   overflow-y: auto;
@@ -722,10 +725,14 @@ FOOTER STYLES
 }
 
 .thumb-img {
-  display: block;
-  width: 40%;
-  float: left;
-  padding: 1em;
+    display: block;
+     width: 100%;
+    /* float: left; */
+    padding: 1em;
+    height: 100px;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 #open-time-title {
@@ -734,4 +741,17 @@ FOOTER STYLES
 
 .pub-attributes {
   padding-left: 1em;
+}
+
+.isOpen{
+    margin-top: .5em;
+}
+.green{
+    color: #679c52;
+}
+.red{
+    color: #ab685b;
+}
+.yellow{
+    color: #a59542;
 }
